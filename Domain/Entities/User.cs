@@ -23,22 +23,19 @@ namespace Domain.Entities
 
         [Required(ErrorMessage = "Role is required")]
         [StringLength(20, ErrorMessage = "Role can't be longer than 20 characters")]
-        public UserRole Role { get; set; }
+        public string Role { get; set; }
 
         public bool IsBlocked { get; set; } = false;
         public bool IsDeleted { get; set; } = false;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+        public GuideProfile GuideProfile { get; set; }
     }
 
 
-    public enum UserRole
-    {
-        User,
-        Guide,
-        Admin
-    }
+   
 }
 
 

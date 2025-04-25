@@ -19,3 +19,6 @@ namespace Application.Dto
         public string Password { get; set; }
     }
 }
+
+
+

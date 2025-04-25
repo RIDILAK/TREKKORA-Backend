@@ -15,7 +15,26 @@ namespace Application.Mapper
         {
             CreateMap<User, RegisterDto>().ReverseMap();
             CreateMap<User,LoginDto>().ReverseMap();
-           
+            CreateMap<User,GetAllUserDto>().ReverseMap();
+            CreateMap<Countries,CountryDto>().ReverseMap();
+            CreateMap<Countries,GetContryDto>().ReverseMap();
+            CreateMap<States,AddStatesDto>().ReverseMap();
+            CreateMap<AddPlaceDto, Place>();
+            CreateMap<States,UpdateStateDto>().ReverseMap();
+            CreateMap<Place, PlaceDto>()
+            .ForMember(dest => dest.StateId, opt => opt.MapFrom(src => src.StateId.ToString()))
+            .ForMember(dest => dest.StateName, opt => opt.MapFrom(src => src.State.StateName))
+            .ForMember(dest => dest.CountryName, opt => opt.MapFrom(src => src.State.Countries.CountryName));
+
+            CreateMap<AddPlaceDto, Place>()
+                .ForMember(dest => dest.StateId, opt => opt.MapFrom(src => Guid.Parse(src.StateId)));
+            CreateMap<States,GetStateDto>()
+                .ForMember(dest=>dest.CountryName,opt=>opt.MapFrom(src=>src.Countries.CountryName));
+            CreateMap<User, GuideDto>()
+                .ForMember(dest => dest.GuideProfileDto, opt => opt.MapFrom(src => src.GuideProfile)); ;
+            CreateMap<GuideProfile, GuideProfileDto>().ReverseMap();
+
+
         }
     }
 }

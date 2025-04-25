@@ -10,6 +10,6 @@ namespace Domain.Entities
     {
         public int StatuseCode {  get; set; }
         public string Message {  get; set; }
-        public string Data { get; set; }
+        public T Data { get; set; }
     }
 }

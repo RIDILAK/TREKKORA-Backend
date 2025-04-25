@@ -13,10 +13,10 @@ namespace Application.Services
 {
     public interface IAuthServices
     {
-        Task<Responses<string>>RegisterAsync(RegisterDto registerDto);
-        Task<Responses<string>>LoginAsync(LoginDto loginDto);
+        Task<Responses<string>> RegisterAsync(RegisterDto registerDto);
+        Task<Responses<string>> LoginAsync(LoginDto loginDto);
     }
-    public class AuthServices:IAuthServices
+    public class AuthServices : IAuthServices
     {
         private readonly IUserRepository _userRepository;
         private readonly IJwtServices _jwtServices;
@@ -30,19 +30,26 @@ namespace Application.Services
         }
         public async Task<Responses<string>> RegisterAsync(RegisterDto registerDto)
         {
+
+
             try
             {
+                string[] Roles = { "User", "Guide", "Admin" };
+                if (!Roles.Contains(registerDto.Role))
+                {
+                    return new Responses<string> { Message = "role is not valid", StatuseCode = 404 };
+                }
                 var existingUser = await _userRepository.GetByEmailAsync(registerDto.Email);
-            if (existingUser != null)
-            {
+                if (existingUser != null)
+                {
 
-                return new Responses<string> { Message = "Email Already Exist", StatuseCode = 409 };
-            }
-            registerDto.Password = HashPassword(registerDto.Password);
-            var user = _mapper.Map<User>(registerDto);
-            
+                    return new Responses<string> { Message = "Email Already Exist", StatuseCode = 409 };
+                }
+                registerDto.Password = HashPassword(registerDto.Password);
 
-            
+                var user = _mapper.Map<User>(registerDto);
+                user.Role = registerDto.Role.ToString();
+
                 await _userRepository.AddAsync(user);
                 return new Responses<string> { Message = "Registration Succesfully Completed", StatuseCode = 200 };
 
@@ -64,7 +71,7 @@ namespace Application.Services
                 {
                     return new Responses<string> { Message = "Invalid User", StatuseCode = 400 };
                 }
-                if (user.IsBlocked)
+                if (user.IsBlocked==true)
                 {
                     return new Responses<string> { Message = "You are blocked by Admin", StatuseCode = 403 };
                 }
@@ -80,13 +87,14 @@ namespace Application.Services
 
                 return new Responses<string> { Data = token, Message = "Login Succesfully", StatuseCode = 200 };
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
 
                 return new Responses<string> { Message = $"An Error Occured while processing your Request:{ex.Message}", StatuseCode = 500 };
-            
+
             }
         }
-            
+
 
 
 

@@ -26,4 +26,6 @@ namespace Application.Dto
         [StringLength(20, ErrorMessage = "Role can't be longer than 20 characters")]
         public string Role { get; set; }
     }
+
+  
 }

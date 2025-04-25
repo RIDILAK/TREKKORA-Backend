@@ -1,0 +1,156 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
+using Application.Dto;
+using Application.Helpers;
+using Application.Interfaces;
+using AutoMapper;
+using Domain.Entities;
+using Microsoft.AspNetCore.Http;
+using static System.Net.Mime.MediaTypeNames;
+
+namespace Application.Services
+{
+    public interface IPlaceServices
+    {
+        Task<Responses<List<PlaceDto>>> GetAllPlaces();
+        Task<Responses<string>> AddPlaceAsync(AddPlaceDto placeDto, IFormFile image);
+        Task<Responses<PlaceDto>> GetByIdPlace(Guid id);
+        //Task<Responses<WeatherResponseDto>> GetWeatherByPlaceIdAsync(Guid placeId);
+
+        Task<Responses<List<PlaceDto>>> GetPlacesByStateIdAsync(Guid stateId);
+        Task<Responses<List<PlaceDto>>> GetPlacesByCountryIdAsync(Guid countryId);
+        Task <Responses<string>> UpdatePlaceAsync(Guid id, AddPlaceDto updatedPlace, IFormFile image);
+        Task<Responses<string>>DeletePlace(Guid id);
+    }
+    public class PlaceServices:IPlaceServices
+    {
+        private readonly IPlaceRepository _placeRepository;
+        private readonly IStatesRepository _stateRepository;
+        private readonly ICountryRepository _countryRepository;
+        private readonly ICLoudinaryServices _cloudinaryRepository;
+        private readonly IWeatherServices _weatherRepository;
+        private readonly IMapper _mapper;
+
+        public PlaceServices(IPlaceRepository placeRepository,
+            IStatesRepository statesRepository,
+            ICLoudinaryServices cLoudinaryServices,
+            IWeatherServices weather,
+            IMapper mapper)
+        {
+            _placeRepository = placeRepository;
+            _stateRepository = statesRepository;
+            _cloudinaryRepository = cLoudinaryServices;
+            _weatherRepository = weather;
+            _mapper = mapper;
+        }
+
+        public async Task<Responses<List<PlaceDto>>> GetAllPlaces()
+        {
+            var places = await _placeRepository.GetAllActivePlacesAsync();
+            var result = _mapper.Map<List<PlaceDto>>(places);
+            return new Responses<List<PlaceDto>>()
+            {
+                Data = result,
+                Message = "Places fetched successfully",
+                StatuseCode = 200
+            };
+        }
+
+        public async Task<Responses<PlaceDto>> GetByIdPlace(Guid id)
+        {
+            var places = await _placeRepository.GetPlaceByIdAsync(id);
+            if (places == null)
+            {
+                return new Responses<PlaceDto>() { Message = "Id not Found", StatuseCode = 400 };
+
+            }
+            var result= _mapper.Map<PlaceDto>(places);
+            return new Responses<PlaceDto> { Data= result,Message="Place Fetched",StatuseCode=200 };
+        }
+        public async Task<Responses<string>> AddPlaceAsync(AddPlaceDto placeDto, IFormFile image)
+        {
+            var imageUrl = await _cloudinaryRepository.UploadImage(image);
+            var place = _mapper.Map<Place>(placeDto);
+            place.ImageUrl = imageUrl;
+            place.Id = Guid.NewGuid();
+            place.CreatedAt = DateTime.UtcNow;
+
+            await _placeRepository.AddPlaceAsync(place);
+            return new Responses<string> { Message = "Place added successfully", StatuseCode = 200 };
+        }
+
+        //public async Task<Responses<WeatherResponseDto>> GetWeatherByPlaceIdAsync(Guid placeId)
+        //{
+        //    var place = await _placeRepository.GetPlaceByIdAsync(placeId);
+        //    if (place == null)
+        //        return new Responses<WeatherResponseDto> { Message = "Place not found", StatuseCode = 404 };
+
+        //    var state = await _stateRepository.GetByIdAsync(place.StateId);
+        //    var country = await _countryRepository.GetByIdAsync(state.CountryId);
+
+        //    if (string.IsNullOrWhiteSpace(place.Pincode) || string.IsNullOrWhiteSpace(country.CountryCode))
+        //        return new Responses<WeatherResponseDto> { Message = "Pincode or CountryCode missing", StatuseCode = 400 };
+
+        //    var weatherData = await _weatherRepository.GetWeatherByPincodeAsync(place.Pincode, country.CountryCode);
+
+        //    return new Responses<WeatherResponseDto>
+        //    {
+        //        Data = weatherData,
+        //        Message = "Weather fetched successfully",
+        //        StatuseCode = 200
+        //    };
+        //}
+
+       public async Task<Responses<List<PlaceDto>>> GetPlacesByStateIdAsync(Guid stateId)
+        {
+           var state= await _placeRepository.GetPlacesByStateIdAsync(stateId);
+            var mapped = _mapper.Map<List<PlaceDto>>(state);
+            return new Responses<List<PlaceDto>> { StatuseCode = 200,Data=mapped,Message="Places Fetched" };
+
+        }
+
+       public async Task<Responses<List<PlaceDto>>> GetPlacesByCountryIdAsync(Guid countryId)
+        {
+            var country= await _placeRepository.GetPlacesByCountryIdAsync(countryId);
+            var mapped = _mapper.Map<List<PlaceDto>>(country);
+
+            return new Responses<List<PlaceDto>>{ StatuseCode = 200,Message="Place Fetched",Data=mapped};
+        }
+
+        public async Task<Responses<string>> UpdatePlaceAsync(Guid id, AddPlaceDto updatedPlace, IFormFile image)
+        {
+            var existingPlace = await _placeRepository.GetPlaceByIdAsync(id);
+            if (existingPlace == null)
+            {
+                return new Responses<string> { Message = "Id not Found", StatuseCode = 400 };
+            }
+
+
+            if (image != null)
+            {
+                var imageUrl = await _cloudinaryRepository.UploadImage(image);
+                existingPlace.ImageUrl = imageUrl;
+            }
+
+            existingPlace.PlaceName = updatedPlace.PlaceName;
+            existingPlace.Description = updatedPlace.Description;
+            existingPlace.Pincode = updatedPlace.Pincode;
+            existingPlace.BestTimeToTravel = updatedPlace.BestTimeToTravel;
+
+            await _placeRepository.UpdatePlaceAsync(existingPlace);
+            return new Responses<string> { StatuseCode = 200, Message = "Place Update Succesfully" };
+        }
+
+     public async   Task<Responses<string>> DeletePlace(Guid id)
+        {
+             await _placeRepository.DeletePlaceAsync(id);
+            return new Responses<string> {Message="Place Deleted succsefull",StatuseCode=200};
+        }
+
+
+    }
+}
