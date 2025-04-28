@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250425134514_second")]
-    partial class second
+    [Migration("20250428094823_first")]
+    partial class first
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,6 +30,10 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CountryCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CountryName")
                         .IsRequired()
@@ -146,6 +150,45 @@ namespace Infrastructure.Migrations
                     b.ToTable("Places");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Rating", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("GuideId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("PlaceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("RatingValue")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Review")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GuideId");
+
+                    b.HasIndex("PlaceId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Rating");
+                });
+
             modelBuilder.Entity("Domain.Entities.States", b =>
                 {
                     b.Property<Guid>("Id")
@@ -215,12 +258,36 @@ namespace Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Domain.Entities.WishList", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("PlaceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlaceId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("WishList");
+                });
+
             modelBuilder.Entity("Domain.Entities.GuideProfile", b =>
                 {
                     b.HasOne("Domain.Entities.User", "User")
                         .WithOne("GuideProfile")
                         .HasForeignKey("Domain.Entities.GuideProfile", "GuideId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -231,10 +298,35 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.States", "State")
                         .WithMany("places")
                         .HasForeignKey("StateId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("State");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Rating", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "Guide")
+                        .WithMany("Ratings")
+                        .HasForeignKey("GuideId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Domain.Entities.Place", "Place")
+                        .WithMany("Rating")
+                        .HasForeignKey("PlaceId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany("Ratingss")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Guide");
+
+                    b.Navigation("Place");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Entities.States", b =>
@@ -242,15 +334,41 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.Countries", "Countries")
                         .WithMany("states")
                         .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Countries");
                 });
 
+            modelBuilder.Entity("Domain.Entities.WishList", b =>
+                {
+                    b.HasOne("Domain.Entities.Place", "Place")
+                        .WithMany("WishList")
+                        .HasForeignKey("PlaceId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany("wishLists")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Place");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Domain.Entities.Countries", b =>
                 {
                     b.Navigation("states");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Place", b =>
+                {
+                    b.Navigation("Rating");
+
+                    b.Navigation("WishList");
                 });
 
             modelBuilder.Entity("Domain.Entities.States", b =>
@@ -262,6 +380,12 @@ namespace Infrastructure.Migrations
                 {
                     b.Navigation("GuideProfile")
                         .IsRequired();
+
+                    b.Navigation("Ratings");
+
+                    b.Navigation("Ratingss");
+
+                    b.Navigation("wishLists");
                 });
 #pragma warning restore 612, 618
         }

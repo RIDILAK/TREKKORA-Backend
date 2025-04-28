@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Dto;
 using Application.Interfaces;
 using Domain.Entities;
 using Infrastructure.Context;
@@ -57,6 +58,8 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
         }
 
+
+       
         public async Task UpdatePlaceAsync(Place place)
         {
             _appDbContext.Places.Update(place);

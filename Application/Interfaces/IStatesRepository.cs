@@ -17,5 +17,6 @@ namespace Application.Interfaces
         Task UpdateAsync(States state);
         
         Task DeleteAsync(States state);
+        Task<Guid> GetByIdPlace(Guid id);
     }
 }

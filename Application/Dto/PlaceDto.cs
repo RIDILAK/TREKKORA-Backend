@@ -13,9 +13,10 @@ namespace Application.Dto
         public string PlaceName { get; set; }
         public string StateId { get; set; }
         public string CountryName { get; set; }
+
+        public string CountryCode { get; set; }
         public string StateName { get; set; }
         public string ImageUrl { get;set; } 
-
 
         public string Pincode { get; set; }
     
@@ -26,15 +27,15 @@ namespace Application.Dto
 
     public class AddPlaceDto
     {
-        [FromForm]
+       
         public string PlaceName { get; set; }
-        [FromForm]
+      
         public string StateId { get; set; }
-        [FromForm]
+       
         public string Pincode { get; set; }
-        [FromForm]
+      
         public string BestTimeToTravel { get; set; }
-        [FromForm]
+        
         public string Description { get; set; }
     }
 
@@ -47,4 +48,6 @@ namespace Application.Dto
         public float WindSpeed { get; set; }
         public int Humidity { get; set; }
     }
+
+   
 }

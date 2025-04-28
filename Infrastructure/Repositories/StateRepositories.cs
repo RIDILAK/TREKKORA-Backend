@@ -52,6 +52,15 @@ namespace Infrastructure.Repositories
             await _appDbContext.SaveChangesAsync();
         }
 
+        public async Task<Guid> GetByIdPlace(Guid id)
+        {
+           var state= await _appDbContext.Places
+                                  .Where(s => s.Id == id)
+                                  .Select(s => s.StateId)
+                                  .FirstOrDefaultAsync();
+           return state;
+        }
+
 
     }
 }

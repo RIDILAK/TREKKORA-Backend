@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
 
 
-namespace Trekkora.Application.Interfaces
+namespace Application.Interfaces
 {
     public interface IUserRepository
     {

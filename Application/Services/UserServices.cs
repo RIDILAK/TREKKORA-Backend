@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Dto;
+using Application.Interfaces;
 using AutoMapper;
 using Domain.Entities;
-using Trekkora.Application.Interfaces;
 
 namespace Application.Services
 {

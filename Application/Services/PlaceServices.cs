@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -19,7 +20,7 @@ namespace Application.Services
         Task<Responses<List<PlaceDto>>> GetAllPlaces();
         Task<Responses<string>> AddPlaceAsync(AddPlaceDto placeDto, IFormFile image);
         Task<Responses<PlaceDto>> GetByIdPlace(Guid id);
-        //Task<Responses<WeatherResponseDto>> GetWeatherByPlaceIdAsync(Guid placeId);
+        Task<Responses<WeatherResponseDto>> GetWeatherByPlaceIdAsync(Guid placeId);
 
         Task<Responses<List<PlaceDto>>> GetPlacesByStateIdAsync(Guid stateId);
         Task<Responses<List<PlaceDto>>> GetPlacesByCountryIdAsync(Guid countryId);
@@ -83,29 +84,22 @@ namespace Application.Services
             return new Responses<string> { Message = "Place added successfully", StatuseCode = 200 };
         }
 
-        //public async Task<Responses<WeatherResponseDto>> GetWeatherByPlaceIdAsync(Guid placeId)
-        //{
-        //    var place = await _placeRepository.GetPlaceByIdAsync(placeId);
-        //    if (place == null)
-        //        return new Responses<WeatherResponseDto> { Message = "Place not found", StatuseCode = 404 };
+        public async Task<Responses<WeatherResponseDto>> GetWeatherByPlaceIdAsync(Guid placeId)
+        {
+           
+            var place=  await _placeRepository.GetPlaceByIdAsync(placeId);
+            var fullpalce = _mapper.Map<PlaceDto>(place);
+            var weatherData = await _weatherRepository.GetWeatherByPincodeAsync(fullpalce.Pincode,fullpalce.CountryCode);
 
-        //    var state = await _stateRepository.GetByIdAsync(place.StateId);
-        //    var country = await _countryRepository.GetByIdAsync(state.CountryId);
+            return new Responses<WeatherResponseDto>
+            {
+                Data = weatherData,
+                Message = "Weather fetched successfully",
+                StatuseCode = 200
+            };
+        }
 
-        //    if (string.IsNullOrWhiteSpace(place.Pincode) || string.IsNullOrWhiteSpace(country.CountryCode))
-        //        return new Responses<WeatherResponseDto> { Message = "Pincode or CountryCode missing", StatuseCode = 400 };
-
-        //    var weatherData = await _weatherRepository.GetWeatherByPincodeAsync(place.Pincode, country.CountryCode);
-
-        //    return new Responses<WeatherResponseDto>
-        //    {
-        //        Data = weatherData,
-        //        Message = "Weather fetched successfully",
-        //        StatuseCode = 200
-        //    };
-        //}
-
-       public async Task<Responses<List<PlaceDto>>> GetPlacesByStateIdAsync(Guid stateId)
+        public async Task<Responses<List<PlaceDto>>> GetPlacesByStateIdAsync(Guid stateId)
         {
            var state= await _placeRepository.GetPlacesByStateIdAsync(stateId);
             var mapped = _mapper.Map<List<PlaceDto>>(state);

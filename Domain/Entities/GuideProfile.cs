@@ -25,5 +25,7 @@ namespace Domain.Entities
 
         public User User { get; set; }
 
+        //public ICollection<Rating> Rating { get; set; }
+
     }
 }

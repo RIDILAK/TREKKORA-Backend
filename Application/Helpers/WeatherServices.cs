@@ -11,7 +11,7 @@ namespace Application.Helpers
 {
     public interface IWeatherServices
     {
-        Task<WeatherResponseDto> GetWeatherByPincodeAsync(string pincode, string countryCode = "IN");
+        Task<WeatherResponseDto> GetWeatherByPincodeAsync(string pincode, string countryCode );
     }
     public class WeatherServices:IWeatherServices
     {
@@ -24,7 +24,7 @@ namespace Application.Helpers
             _apiKey = config["OpenWeatherMap:ApiKey"];
         }
 
-        public async Task<WeatherResponseDto> GetWeatherByPincodeAsync(string pincode, string countryCode = "IN")
+        public async Task<WeatherResponseDto> GetWeatherByPincodeAsync(string pincode, string countryCode)
         {
             var response = await _httpClient.GetAsync($"https://api.openweathermap.org/data/2.5/weather?zip={pincode},{countryCode}&units=metric&appid={_apiKey}");
 

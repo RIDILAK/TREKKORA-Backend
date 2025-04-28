@@ -16,5 +16,6 @@ namespace Application.Interfaces
         Task<Countries?> GetByIdAsync(Guid id);
         Task UpdateAsync(Countries country);
         Task DeleteAsync(Countries country);
+        
     }
 }

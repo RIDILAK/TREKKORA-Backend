@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Dto;
 using Domain.Entities;
 
 namespace Application.Interfaces
@@ -16,5 +17,6 @@ namespace Application.Interfaces
         Task<List<Place>> GetPlacesByCountryIdAsync(Guid countryId);
         Task UpdatePlaceAsync(Place place);
         Task DeletePlaceAsync(Guid id);
+        
     }
 }

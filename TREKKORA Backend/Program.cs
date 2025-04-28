@@ -6,14 +6,10 @@ using Application.Interfaces;
 using Application.Mapper;
 using Application.Services;
 using Infrastructure;
-using Infrastructure.Context;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Trekkora.Application.Interfaces;
 
 namespace TREKKORA_Backend
 {
@@ -65,25 +61,30 @@ namespace TREKKORA_Backend
             builder.Services.AddInfrastructure(builder.Configuration);
 
 
-            
-            builder.Services.AddScoped<ICountryRepository,CountryRepository>();
+
+            builder.Services.AddScoped<ICountryRepository, CountryRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepositories>();
-            builder.Services.AddScoped<IStatesRepository,StateRepositories>();
-            builder.Services.AddScoped<IGuidProfileRepositories,GuidProfileRepository>();
-            builder.Services.AddScoped<IGuidRepository,GuideRepository>();
-            builder.Services.AddScoped<IPlaceRepository,PlaceRepository>();
+            builder.Services.AddScoped<IStatesRepository, StateRepositories>();
+            builder.Services.AddScoped<IGuidProfileRepositories, GuidProfileRepository>();
+            builder.Services.AddScoped<IGuidRepository, GuideRepository>();
+            builder.Services.AddScoped<IPlaceRepository, PlaceRepository>();
+            builder.Services.AddScoped<IWishListRepository, WishListRepository>();
+            builder.Services.AddScoped<IRatingRepository, RatingRepository>();
 
 
 
-            builder.Services.AddScoped<IJwtServices,JwtServices>();
+            builder.Services.AddScoped<IJwtServices, JwtServices>();
             builder.Services.AddScoped<IStateServices, StateServices>();
-            builder.Services.AddScoped<IAuthServices,AuthServices>();
-            builder.Services.AddScoped<IUserServices,UserServices>();
-            builder.Services.AddScoped<ICountryServices,CountryServices>();
-            builder.Services.AddScoped<IGuideProfileService,GuidProfileService>();
-            builder.Services.AddScoped<ICLoudinaryServices,CloudinaryServices>();
+            builder.Services.AddScoped<IAuthServices, AuthServices>();
+            builder.Services.AddScoped<IUserServices, UserServices>();
+            builder.Services.AddScoped<ICountryServices, CountryServices>();
+            builder.Services.AddScoped<IGuideProfileService, GuidProfileService>();
+            builder.Services.AddScoped<ICLoudinaryServices, CloudinaryServices>();
             builder.Services.AddHttpClient<IWeatherServices, WeatherServices>();
-            builder.Services.AddScoped<IPlaceServices,PlaceServices>();
+            builder.Services.AddScoped<IWeatherServices, WeatherServices>();
+            builder.Services.AddScoped<IPlaceServices, PlaceServices>();
+            builder.Services.AddScoped<IWishListServices, WishListService>();
+            builder.Services.AddScoped<IRatinServices,RatingService>();
 
 
             builder.Services.AddAutoMapper(typeof(MappingProfile));

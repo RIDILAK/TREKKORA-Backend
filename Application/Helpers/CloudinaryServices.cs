@@ -8,7 +8,7 @@ using CloudinaryDotNet;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
-namespace Application.Services
+namespace Application.Helpers
 {
 
     public interface ICLoudinaryServices

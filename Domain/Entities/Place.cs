@@ -23,5 +23,10 @@ namespace Domain.Entities
 
   
         public States State { get; set; }
+
+        public List<WishList> WishList { get; set; }
+
+        public ICollection<Rating> Rating { get; set; }
+
     }
 }

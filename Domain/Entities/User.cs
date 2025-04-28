@@ -32,6 +32,11 @@ namespace Domain.Entities
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
         public GuideProfile GuideProfile { get; set; }
+
+        public List<WishList>wishLists { get; set; }
+
+        public ICollection<Rating> Ratingss { get; set; }
+        public ICollection<Rating> Ratings { get; set; }
     }
 
 
