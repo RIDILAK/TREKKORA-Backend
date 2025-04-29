@@ -45,7 +45,7 @@ namespace Application.Services
             var rating = _mapper.Map<Rating>(dto);
             rating.UserId = userId;
           var result=   await _ratingRepository.AddAsync(rating);
-            return new Responses<Rating> { Data = result,StatuseCode=200,Message="Rated Succsefully" };
+            return new Responses<Rating> { StatuseCode=200,Message="Rated Succsefully" };
 
         }
 

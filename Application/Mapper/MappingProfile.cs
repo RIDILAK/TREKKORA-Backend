@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Application.Dto;
 using AutoMapper;
 using Domain.Entities;
+using Microsoft.AspNetCore.Routing.Constraints;
 
 namespace Application.Mapper
 {
@@ -41,12 +42,23 @@ namespace Application.Mapper
             CreateMap<CreateRatingForPlaceDto, Rating>();
 
             CreateMap<Rating,GetRatingGuideDto>()
-                .ForMember(dest=>dest.GuideName, opt=>opt.MapFrom(src=>src.User.Name));
+                .ForMember(dest=>dest.GuideName, opt=>opt.MapFrom(src=>src.Guide.Name));
             CreateMap<Rating,GetRatingPlaceDto>()
                 .ForMember(dest=>dest.PlaceName,opt=>opt.MapFrom(src=>src.Place.PlaceName));
             CreateMap<Rating,GetRatingByUser>()
                 .ForMember(dest=>dest.GuideName,opt=>opt.MapFrom(src=>src.User.Name))
                 .ForMember(dest=>dest.PlaceName,opt=>opt.MapFrom(src=>src.Place.PlaceName));
+
+            CreateMap<Booking,AddBookingDto>().ReverseMap() ;
+            CreateMap<Booking, GetBookingDto>()
+                .ForMember(dest=>dest.UserName,opt=>opt.MapFrom(src=>src.User.Name))
+                .ForMember(dest => dest.PlaceName, opt => opt.MapFrom(src=>src.place.PlaceName))
+                .ForMember(dest=>dest.GuideName,opt=>opt.MapFrom(src=>src.Guide.Name))
+                .ReverseMap();
+            CreateMap<Booking, UpdateBookingDatesDto>().ReverseMap();
+            CreateMap<Booking,UpdateBookingStatusDto>().ReverseMap();
+
+            
                
 
 

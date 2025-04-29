@@ -17,6 +17,10 @@ namespace Domain.Entities
         public string ImageUrl { get; set; }
         public string Description { get; set; }
 
+        public decimal Price { get; set; }  
+
+        public int MinimumDays {  get; set; }
+
         public bool IsDeleted { get; set; } = false;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
@@ -27,6 +31,8 @@ namespace Domain.Entities
         public List<WishList> WishList { get; set; }
 
         public ICollection<Rating> Rating { get; set; }
+
+        public ICollection<Booking> Bookings { get; set; }
 
     }
 }

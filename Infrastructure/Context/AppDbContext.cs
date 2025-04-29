@@ -24,6 +24,9 @@ namespace Infrastructure.Context
 
         public DbSet<Rating> Rating { get; set; }
 
+        public DbSet<Booking> Bookings { get; set; }
+
+
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -83,6 +86,20 @@ namespace Infrastructure.Context
             modelBuilder.Entity<Rating>()
                .Property(r => r.RatingValue)
                .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<Place>()
+                .HasMany(t => t.Bookings)
+                .WithOne(p => p.place)
+                .HasForeignKey(t => t.PlaceId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+
+            modelBuilder.Entity<User>()
+          .HasMany(u => u.Bookings)
+          .WithOne(b => b.User)
+          .HasForeignKey(b => b.UserId)
+          .OnDelete(DeleteBehavior.NoAction);
+
         }
     
     }

@@ -70,6 +70,8 @@ namespace TREKKORA_Backend
             builder.Services.AddScoped<IPlaceRepository, PlaceRepository>();
             builder.Services.AddScoped<IWishListRepository, WishListRepository>();
             builder.Services.AddScoped<IRatingRepository, RatingRepository>();
+            builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+            builder.Services.AddScoped<ISearchRepository, SearchReposiotry>();
 
 
 
@@ -85,7 +87,8 @@ namespace TREKKORA_Backend
             builder.Services.AddScoped<IPlaceServices, PlaceServices>();
             builder.Services.AddScoped<IWishListServices, WishListService>();
             builder.Services.AddScoped<IRatinServices,RatingService>();
-
+            builder.Services.AddScoped<IBookingServices,BookinServices>();
+            builder.Services.AddScoped<IsearchServices, SearchServices>();  
 
             builder.Services.AddAutoMapper(typeof(MappingProfile));
 

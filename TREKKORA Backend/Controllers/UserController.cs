@@ -12,10 +12,12 @@ namespace TREKKORA_Backend.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserServices _userServices;
+        private readonly IsearchServices _searchServices;
 
-        public UserController(IUserServices userServices)
+        public UserController(IUserServices userServices,IsearchServices searchServices)
         {
             _userServices = userServices;
+            _searchServices = searchServices;
         }
 
         [HttpGet("Get-All")]
@@ -53,6 +55,14 @@ namespace TREKKORA_Backend.Controllers
             var isBlocked = await _userServices.BlockUser(id);
             return StatusCode(isBlocked.StatuseCode,isBlocked);
 
+        }
+
+        [HttpGet("Search")]
+
+        public async Task<IActionResult> Search([FromQuery] string query)
+        {
+            var result= await _searchServices.SearchAsync(query);
+            return StatusCode(result.StatuseCode, result);
         }
     }
 

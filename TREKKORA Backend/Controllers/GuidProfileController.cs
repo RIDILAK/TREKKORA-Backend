@@ -19,6 +19,15 @@ namespace TREKKORA_Backend.Controllers
             _guideProfileService = guideProfileService;
         }
 
+        [HttpPost("Approval")]
+        [Authorize(Roles ="Admin")]
+
+        public async Task<IActionResult>ApprovedByAdmin(Guid GuideId)
+        {
+            var result=await _guideProfileService.ApprovedGuide(GuideId);
+            return StatusCode(result.StatuseCode, result);
+        }
+
         [HttpGet("All")]
         [Authorize(Roles ="Admin,User")]
 

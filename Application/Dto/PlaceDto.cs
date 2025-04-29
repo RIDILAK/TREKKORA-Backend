@@ -16,13 +16,15 @@ namespace Application.Dto
 
         public string CountryCode { get; set; }
         public string StateName { get; set; }
-        public string ImageUrl { get;set; } 
-
+        public string ImageUrl { get;set; }
+        public int MinimumDays { get; set; }
         public string Pincode { get; set; }
+
     
         public string BestTimeToTravel { get; set; }
       
         public string Description { get; set; }
+        public decimal Price { get; set; }
     }
 
     public class AddPlaceDto
@@ -31,12 +33,14 @@ namespace Application.Dto
         public string PlaceName { get; set; }
       
         public string StateId { get; set; }
-       
+        public int MinimumDays { get; set; }
+
         public string Pincode { get; set; }
       
         public string BestTimeToTravel { get; set; }
         
         public string Description { get; set; }
+        public decimal Price { get; set; }
     }
 
     public class WeatherResponseDto

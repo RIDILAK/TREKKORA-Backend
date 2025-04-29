@@ -23,6 +23,7 @@ namespace Application.Services
 
         Task<Responses<string>> DeleteProfile(Guid id);
         Task<Responses<string>> ToggleBlockGuide(Guid id);
+        Task<Responses<bool>>ApprovedGuide(Guid GuideId);
 
 
     }
@@ -77,7 +78,7 @@ namespace Application.Services
 
         }
 
-     public  async Task<Responses<string>> UpdateProfile(Guid id, GuideDto guideDto, IFormFile formFile,IFormFile formFile1)
+        public async Task<Responses<string>> UpdateProfile(Guid id, GuideDto guideDto, IFormFile formFile, IFormFile formFile1)
         {
             var guide = await _guideProfilerepository.GetByIdAsync(id);
             if (guide == null)
@@ -85,21 +86,26 @@ namespace Application.Services
                 return new Responses<string> { Message = "Id not Found", StatuseCode = 200 };
 
             }
+            if (guide.GuideProfile?.ISApproved != true)
+            {
+                return new Responses<string> { Message = "Guide not approved yet", StatuseCode = 403 };
+            }
+
             string uploadedProfileImage = await _cloudinaryServices.UploadImage(formFile);
             string uploadedCertificateImage = await _cloudinaryServices.UploadImage(formFile1);
 
 
             guide.Name = guideDto.Name;
             guide.Email = guideDto.Email;
-            guide.GuideProfile.ProfileImage= uploadedProfileImage;
-            guide.GuideProfile.Mobile=guideDto.GuideProfileDto.Mobile;
-            guide.GuideProfile.Location=guideDto.GuideProfileDto.Location;
-            guide.GuideProfile.Experience=guideDto.GuideProfileDto.Experience;
-            guide.GuideProfile.Languages=guideDto.GuideProfileDto.Languages;
-            guide.GuideProfile.AreasCovered=guideDto.GuideProfileDto.AreasCovered;
-            guide.GuideProfile.Certificates= uploadedCertificateImage;
-            guide.GuideProfile.Bio=guide.GuideProfile.Bio;
-            guide.GuideProfile.WhyTravelWithMe=guide.GuideProfile.WhyTravelWithMe;
+            guide.GuideProfile.ProfileImage = uploadedProfileImage;
+            guide.GuideProfile.Mobile = guideDto.GuideProfileDto.Mobile;
+            guide.GuideProfile.Location = guideDto.GuideProfileDto.Location;
+            guide.GuideProfile.Experience = guideDto.GuideProfileDto.Experience;
+            guide.GuideProfile.Languages = guideDto.GuideProfileDto.Languages;
+            guide.GuideProfile.AreasCovered = guideDto.GuideProfileDto.AreasCovered;
+            guide.GuideProfile.Certificates = uploadedCertificateImage;
+            guide.GuideProfile.Bio = guide.GuideProfile.Bio;
+            guide.GuideProfile.WhyTravelWithMe = guide.GuideProfile.WhyTravelWithMe;
 
             await _guideProfilerepository.UpdateAsync(guide);
             return new Responses<string> { Message = "Profile Updated Succesfully", StatuseCode = 200 };
@@ -114,8 +120,13 @@ namespace Application.Services
                 return new Responses<string> { Message = "Id not Found", StatuseCode = 200 };
 
             }
+            if (guide.GuideProfile?.ISApproved != true)
+            {
+                return new Responses<string> { Message = "Guide not approved yet", StatuseCode = 403 };
+            }
+
             await _guideProfilerepository.DeleteAsync(guide);
-            return new Responses<string> { Message = "Guide Deleted Succesfully" ,StatuseCode = 200 };
+            return new Responses<string> { Message = "Guide Deleted Succesfully", StatuseCode = 200 };
         }
 
         public async Task<Responses<string>> ToggleBlockGuide(Guid id)
@@ -124,11 +135,29 @@ namespace Application.Services
             if (guide == null)
                 return new Responses<string> { StatuseCode = 404, Message = "Guide not found" };
 
+            if (guide.GuideProfile?.ISApproved != true)
+            {
+                return new Responses<string> { Message = "Guide not approved yet", StatuseCode = 403 };
+            }
+
             guide.IsBlocked = !guide.IsBlocked;
             await _guideProfilerepository.UpdateAsync(guide);
 
             string status = guide.IsBlocked ? "blocked" : "unblocked";
             return new Responses<string> { StatuseCode = 200, Message = $"Guide {status} successfully" };
         }
+        public async Task<Responses<bool>> ApprovedGuide(Guid GuideId)
+        {
+            var guide = await _guideProfilerepository.GetByIdAsync(GuideId);
+            if (guide == null)
+            {
+                return new Responses<bool> { StatuseCode = 400, Message = "GuideId Not Found" };
+
+            }
+            guide.GuideProfile.ISApproved = true;
+            return new Responses<bool> { Message = "Approved By Admin", StatuseCode = 200 };
+
+
+        } 
     }
 }

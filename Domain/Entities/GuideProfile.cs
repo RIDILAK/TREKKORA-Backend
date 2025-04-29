@@ -23,6 +23,8 @@ namespace Domain.Entities
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; } 
 
+        public bool ISApproved {  get; set; }=false;
+
         public User User { get; set; }
 
         //public ICollection<Rating> Rating { get; set; }

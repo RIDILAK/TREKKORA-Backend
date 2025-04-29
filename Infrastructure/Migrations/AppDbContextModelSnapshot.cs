@@ -22,6 +22,54 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Domain.Entities.Booking", b =>
+                {
+                    b.Property<Guid>("BookingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("BookingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("GuideId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("NumberOfPeople")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("PlaceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("BookingId");
+
+                    b.HasIndex("GuideId");
+
+                    b.HasIndex("PlaceId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Bookings");
+                });
+
             modelBuilder.Entity("Domain.Entities.Countries", b =>
                 {
                     b.Property<Guid>("Id")
@@ -73,6 +121,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<Guid>("GuideId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("ISApproved")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Languages")
                         .IsRequired()
@@ -129,6 +180,9 @@ namespace Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<int>("MinimumDays")
+                        .HasColumnType("int");
+
                     b.Property<string>("Pincode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -136,6 +190,9 @@ namespace Infrastructure.Migrations
                     b.Property<string>("PlaceName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("StateId")
                         .HasColumnType("uniqueidentifier");
@@ -279,6 +336,33 @@ namespace Infrastructure.Migrations
                     b.ToTable("WishList");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Booking", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "Guide")
+                        .WithMany()
+                        .HasForeignKey("GuideId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Place", "place")
+                        .WithMany("Bookings")
+                        .HasForeignKey("PlaceId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany("Bookings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Guide");
+
+                    b.Navigation("User");
+
+                    b.Navigation("place");
+                });
+
             modelBuilder.Entity("Domain.Entities.GuideProfile", b =>
                 {
                     b.HasOne("Domain.Entities.User", "User")
@@ -363,6 +447,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Place", b =>
                 {
+                    b.Navigation("Bookings");
+
                     b.Navigation("Rating");
 
                     b.Navigation("WishList");
@@ -375,6 +461,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
+                    b.Navigation("Bookings");
+
                     b.Navigation("GuideProfile")
                         .IsRequired();
 

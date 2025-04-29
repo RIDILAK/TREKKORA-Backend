@@ -132,7 +132,9 @@ namespace Application.Services
 
             existingPlace.PlaceName = updatedPlace.PlaceName;
             existingPlace.Description = updatedPlace.Description;
+            existingPlace.Price = updatedPlace.Price;
             existingPlace.Pincode = updatedPlace.Pincode;
+            existingPlace.MinimumDays = updatedPlace.MinimumDays;
             existingPlace.BestTimeToTravel = updatedPlace.BestTimeToTravel;
 
             await _placeRepository.UpdatePlaceAsync(existingPlace);
