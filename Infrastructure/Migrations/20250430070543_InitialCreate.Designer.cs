@@ -4,6 +4,7 @@ using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250430070543_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,7 +70,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Bookings", "transactions");
+                    b.ToTable("Bookings");
                 });
 
             modelBuilder.Entity("Domain.Entities.Countries", b =>
@@ -78,7 +81,7 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("CountryCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CountryName")
                         .IsRequired()
@@ -92,10 +95,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CountryCode")
-                        .IsUnique();
-
-                    b.ToTable("Countries", "locations");
+                    b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("Domain.Entities.GuideProfile", b =>
@@ -132,6 +132,10 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Mobile")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -157,7 +161,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("PlaceId");
 
-                    b.ToTable("GuideProfiles", "guides");
+                    b.ToTable("GuideProfiles");
                 });
 
             modelBuilder.Entity("Domain.Entities.Place", b =>
@@ -205,7 +209,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("StateId");
 
-                    b.ToTable("Places", "locations");
+                    b.ToTable("Places");
                 });
 
             modelBuilder.Entity("Domain.Entities.Rating", b =>
@@ -244,7 +248,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Ratings", "useractions");
+                    b.ToTable("Rating");
                 });
 
             modelBuilder.Entity("Domain.Entities.States", b =>
@@ -270,7 +274,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("States", "locations");
+                    b.ToTable("States");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
@@ -313,10 +317,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.ToTable("Users", "auth");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Domain.Entities.WishList", b =>
@@ -340,7 +341,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("WishList", "useractions");
+                    b.ToTable("WishList");
                 });
 
             modelBuilder.Entity("Domain.Entities.Booking", b =>

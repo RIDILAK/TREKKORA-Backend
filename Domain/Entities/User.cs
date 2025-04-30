@@ -1,8 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
+    [Table("Users", Schema = "auth")]
     public class User
     {
         [Key]
@@ -23,6 +25,7 @@ namespace Domain.Entities
 
         [Required(ErrorMessage = "Role is required")]
         [StringLength(20, ErrorMessage = "Role can't be longer than 20 characters")]
+        //[AllowedValues("User,G")]
         public string Role { get; set; }
 
         public bool IsBlocked { get; set; } = false;

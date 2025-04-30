@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250428145555_First")]
-    partial class First
+    [Migration("20250430094623_FourthCreate")]
+    partial class FourthCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,7 +70,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Bookings");
+                    b.ToTable("Bookings", "transactions");
                 });
 
             modelBuilder.Entity("Domain.Entities.Countries", b =>
@@ -81,7 +81,7 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("CountryCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CountryName")
                         .IsRequired()
@@ -95,7 +95,10 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Countries");
+                    b.HasIndex("CountryCode")
+                        .IsUnique();
+
+                    b.ToTable("Countries", "locations");
                 });
 
             modelBuilder.Entity("Domain.Entities.GuideProfile", b =>
@@ -132,13 +135,12 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Mobile")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("PlaceId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ProfileImage")
                         .IsRequired()
@@ -156,7 +158,9 @@ namespace Infrastructure.Migrations
                     b.HasIndex("GuideId")
                         .IsUnique();
 
-                    b.ToTable("GuideProfiles");
+                    b.HasIndex("PlaceId");
+
+                    b.ToTable("GuideProfiles", "guides");
                 });
 
             modelBuilder.Entity("Domain.Entities.Place", b =>
@@ -204,7 +208,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("StateId");
 
-                    b.ToTable("Places");
+                    b.ToTable("Places", "locations");
                 });
 
             modelBuilder.Entity("Domain.Entities.Rating", b =>
@@ -243,7 +247,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Rating");
+                    b.ToTable("Ratings", "useractions");
                 });
 
             modelBuilder.Entity("Domain.Entities.States", b =>
@@ -269,7 +273,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("States");
+                    b.ToTable("States", "locations");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
@@ -312,7 +316,10 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.ToTable("Users", "auth");
                 });
 
             modelBuilder.Entity("Domain.Entities.WishList", b =>
@@ -336,7 +343,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("WishList");
+                    b.ToTable("WishList", "useractions");
                 });
 
             modelBuilder.Entity("Domain.Entities.Booking", b =>
@@ -373,6 +380,13 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("Domain.Entities.GuideProfile", "GuideId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.HasOne("Domain.Entities.Place", "Place")
+                        .WithMany("GuideProfiles")
+                        .HasForeignKey("PlaceId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Place");
 
                     b.Navigation("User");
                 });
@@ -451,6 +465,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entities.Place", b =>
                 {
                     b.Navigation("Bookings");
+
+                    b.Navigation("GuideProfiles");
 
                     b.Navigation("Rating");
 

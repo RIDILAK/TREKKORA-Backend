@@ -24,6 +24,7 @@ namespace Application.Services
         Task<Responses<string>> DeleteProfile(Guid id);
         Task<Responses<string>> ToggleBlockGuide(Guid id);
         Task<Responses<bool>>ApprovedGuide(Guid GuideId);
+        Task<Responses<List<GuideDto>>> GetUnapprovedGuides();
 
 
     }
@@ -99,13 +100,13 @@ namespace Application.Services
             guide.Email = guideDto.Email;
             guide.GuideProfile.ProfileImage = uploadedProfileImage;
             guide.GuideProfile.Mobile = guideDto.GuideProfileDto.Mobile;
-            guide.GuideProfile.Location = guideDto.GuideProfileDto.Location;
+            guide.GuideProfile.PlaceId = guideDto.GuideProfileDto.PlaceId;
             guide.GuideProfile.Experience = guideDto.GuideProfileDto.Experience;
             guide.GuideProfile.Languages = guideDto.GuideProfileDto.Languages;
             guide.GuideProfile.AreasCovered = guideDto.GuideProfileDto.AreasCovered;
             guide.GuideProfile.Certificates = uploadedCertificateImage;
-            guide.GuideProfile.Bio = guide.GuideProfile.Bio;
-            guide.GuideProfile.WhyTravelWithMe = guide.GuideProfile.WhyTravelWithMe;
+            guide.GuideProfile.Bio = guideDto.GuideProfileDto.Bio;
+            guide.GuideProfile.WhyTravelWithMe = guideDto.GuideProfileDto.WhyTravelWithMe;
 
             await _guideProfilerepository.UpdateAsync(guide);
             return new Responses<string> { Message = "Profile Updated Succesfully", StatuseCode = 200 };
@@ -155,9 +156,22 @@ namespace Application.Services
 
             }
             guide.GuideProfile.ISApproved = true;
+            await _guideProfilerepository.UpdateAsync(guide);
             return new Responses<bool> { Message = "Approved By Admin", StatuseCode = 200 };
 
 
-        } 
+        }
+
+       public async Task<Responses<List<GuideDto>>> GetUnapprovedGuides()
+        {
+            var guides = await _guideProfilerepository.GetUnapprovedGuides();
+            if (guides == null)
+            {
+                return new Responses<List<GuideDto>> { Message = "No Unapproved Guides", StatuseCode = 400 };
+            }
+            var mapped= _mapper.Map<List<GuideDto>>(guides);
+            return new Responses<List<GuideDto>> { Data=mapped,StatuseCode=200,Message="Unapproved guides Fetched" };
+
+        }
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class First : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -62,35 +62,6 @@ namespace Infrastructure.Migrations
                         name: "FK_States_Countries_CountryId",
                         column: x => x.CountryId,
                         principalTable: "Countries",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "GuideProfiles",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    GuideId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProfileImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Mobile = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Experience = table.Column<int>(type: "int", nullable: false),
-                    Languages = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AreasCovered = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Certificates = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Bio = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    WhyTravelWithMe = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ISApproved = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GuideProfiles", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_GuideProfiles_Users_GuideId",
-                        column: x => x.GuideId,
-                        principalTable: "Users",
                         principalColumn: "Id");
                 });
 
@@ -153,6 +124,41 @@ namespace Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_Bookings_Users_UserId",
                         column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GuideProfiles",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    GuideId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProfileImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Mobile = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PlaceId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Experience = table.Column<int>(type: "int", nullable: false),
+                    Languages = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AreasCovered = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Certificates = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Bio = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WhyTravelWithMe = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ISApproved = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GuideProfiles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GuideProfiles_Places_PlaceId",
+                        column: x => x.PlaceId,
+                        principalTable: "Places",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_GuideProfiles_Users_GuideId",
+                        column: x => x.GuideId,
                         principalTable: "Users",
                         principalColumn: "Id");
                 });
@@ -234,6 +240,11 @@ namespace Infrastructure.Migrations
                 table: "GuideProfiles",
                 column: "GuideId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GuideProfiles_PlaceId",
+                table: "GuideProfiles",
+                column: "PlaceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Places_StateId",

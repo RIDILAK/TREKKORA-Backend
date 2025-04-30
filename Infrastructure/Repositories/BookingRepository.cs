@@ -86,6 +86,16 @@ namespace Infrastructure.Repositories
                 .Where(c => c.PlaceId == placeId)
                 .ToListAsync();
         }
+        public async Task<List<Booking>> GetPendingRequest(Guid guideId)
+        {
+            return await _appDbContext.Bookings
+                .Include(b=>b.User)
+                .Include(b=>b.Guide)
+                .Include(p=>p.place)
+                .Where(b=>b.GuideId==guideId && b.Status=="Pending")
+                .ToListAsync();
+        }
+       
     }
 }
 

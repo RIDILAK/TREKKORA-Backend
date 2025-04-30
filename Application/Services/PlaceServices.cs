@@ -124,11 +124,10 @@ namespace Application.Services
             }
 
 
-            if (image != null)
-            {
+           
                 var imageUrl = await _cloudinaryRepository.UploadImage(image);
                 existingPlace.ImageUrl = imageUrl;
-            }
+            
 
             existingPlace.PlaceName = updatedPlace.PlaceName;
             existingPlace.Description = updatedPlace.Description;
@@ -136,6 +135,7 @@ namespace Application.Services
             existingPlace.Pincode = updatedPlace.Pincode;
             existingPlace.MinimumDays = updatedPlace.MinimumDays;
             existingPlace.BestTimeToTravel = updatedPlace.BestTimeToTravel;
+            
 
             await _placeRepository.UpdatePlaceAsync(existingPlace);
             return new Responses<string> { StatuseCode = 200, Message = "Place Update Succesfully" };

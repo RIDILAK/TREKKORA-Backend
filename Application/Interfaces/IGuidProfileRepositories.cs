@@ -15,5 +15,6 @@ namespace Application.Interfaces
         Task UpdateAsync(User user);
         Task DeleteAsync(User user);
         Task<bool> ExistsAsync(Guid id);
+        Task<List<User>> GetUnapprovedGuides();
     }
 }

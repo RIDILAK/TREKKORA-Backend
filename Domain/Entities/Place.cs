@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
+    [Table("Places", Schema = "locations")]
     public class Place
     {
         public Guid Id { get; set; }
@@ -27,7 +29,7 @@ namespace Domain.Entities
 
   
         public States State { get; set; }
-
+        public List<GuideProfile> GuideProfiles { get; set; }
         public List<WishList> WishList { get; set; }
 
         public ICollection<Rating> Rating { get; set; }

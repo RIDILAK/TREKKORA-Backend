@@ -37,7 +37,7 @@ namespace TREKKORA_Backend.Controllers
         }
 
         [HttpGet("User")]
-        [Authorize]
+        [Authorize(Roles ="User,Admin")]
 
         public async Task<IActionResult>GetBookingUser(Guid userId)
         {
@@ -46,7 +46,7 @@ namespace TREKKORA_Backend.Controllers
         }
 
         [HttpGet("Guide")]
-        [Authorize]
+        [Authorize(Roles ="Guide,Admin")]
 
         public async Task <IActionResult>GetBookinGuide(Guid guideId)
         {
@@ -54,12 +54,22 @@ namespace TREKKORA_Backend.Controllers
             return StatusCode(result.StatuseCode, result);
         }
         [HttpGet("Place")]
-        [Authorize]
+        [Authorize(Roles ="Admin")]
 
         public async Task<IActionResult>GetBookingPlace(Guid placeId)
         {
             var result= await _services.GetAllBookingPlace(placeId);
             return StatusCode(result.StatuseCode,result);
+        }
+
+        [HttpGet("Pending=Requests")]
+        [Authorize(Roles ="Guide,Admin")]
+
+        public async Task<IActionResult> GetPendingRequest()
+        {
+            var guideId= User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            var result= await _services.GetAllPendingBooking(Guid.Parse(guideId));
+            return StatusCode(result.StatuseCode, result);
         }
 
         [HttpPut("Update-Status")]
@@ -72,7 +82,7 @@ namespace TREKKORA_Backend.Controllers
         }
 
         [HttpPut("Update-Date")]
-        [Authorize]
+        [Authorize(Roles ="User")]
 
         public async Task <IActionResult>UpdateDate(Guid id,UpdateBookingDatesDto dto)
         {
@@ -81,7 +91,7 @@ namespace TREKKORA_Backend.Controllers
         }
 
         [HttpDelete("Delete")]
-        [Authorize]
+        [Authorize(Roles ="User")]
 
         public async Task<IActionResult>DeleteBooking(Guid id)
         {

@@ -37,6 +37,7 @@ namespace Application.Dto
 
         public string Pincode { get; set; }
       
+
         public string BestTimeToTravel { get; set; }
         
         public string Description { get; set; }

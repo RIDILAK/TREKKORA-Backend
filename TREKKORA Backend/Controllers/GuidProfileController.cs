@@ -18,6 +18,13 @@ namespace TREKKORA_Backend.Controllers
         {
             _guideProfileService = guideProfileService;
         }
+        [HttpGet("UnApprovedGuides")]
+        [Authorize(Roles ="Admin")]
+        public async Task<IActionResult> GetUnapprovedGuides()
+        {
+            var result= await _guideProfileService.GetUnapprovedGuides();
+            return StatusCode(result.StatuseCode, result);
+        }
 
         [HttpPost("Approval")]
         [Authorize(Roles ="Admin")]

@@ -18,7 +18,7 @@
             }
 
             [HttpGet("GettAll")]
-            [Authorize(Roles ="Admin")]
+          
             public async Task<IActionResult> GetAll()
             {
                 var result=await _placeServices.GetAllPlaces();
@@ -70,7 +70,7 @@
             [HttpPut("Update-Place")]
             [Authorize(Roles ="Admin")]
 
-            public async Task<IActionResult>UpdatePlace(Guid id,AddPlaceDto place,IFormFile image)
+            public async Task<IActionResult>UpdatePlace(Guid id,[FromForm]AddPlaceDto place,IFormFile image)
             {
                 var result = await _placeServices.UpdatePlaceAsync(id, place, image);
                 return StatusCode(result.StatuseCode,result);

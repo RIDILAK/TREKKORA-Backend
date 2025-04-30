@@ -36,6 +36,9 @@ namespace Application.Mapper
                 .ForMember(dest => dest.GuideProfileDto, opt => opt.MapFrom(src => src.GuideProfile)); ;
             CreateMap<GuideProfile, GuideProfileDto>().ReverseMap();
 
+            CreateMap<GuideProfile,GetGuideProfileDto>()
+                .ForMember(dest => dest.PlaceName,opt=>opt.MapFrom(src=>src.Place.PlaceName));
+
             CreateMap<RatingGuideDto, Rating>();
 
 

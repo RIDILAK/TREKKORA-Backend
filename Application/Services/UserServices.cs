@@ -70,6 +70,11 @@ namespace Application.Services
                 return new Responses<string> { Message = "User not Found", StatuseCode = 404 };
             }
 
+            if (user.Role != null && user.Role.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+            {
+                return new Responses<string> { Message = "Admins cannot be blocked", StatuseCode = 403 };
+            }
+
             await _userRepository.BlockUser(user);
             var status = user.IsBlocked ? "Blocked" : "Unblocked";
             return new Responses<string> { StatuseCode = 200, Message = $"User {status} Succesfully" };

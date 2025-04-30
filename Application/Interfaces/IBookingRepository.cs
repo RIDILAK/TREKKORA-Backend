@@ -18,6 +18,8 @@ namespace Application.Interfaces
         Task UpdateAsync(Booking booking);
         Task DeleteAsync(Booking booking);
         Task<List<Booking>>GetByIdPlaceAsync(Guid placeId);
+
+        Task<List<Booking>> GetPendingRequest(Guid guideId);
     }
     
 }

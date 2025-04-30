@@ -54,5 +54,17 @@ namespace Infrastructure.Repositories
         {
             return await _context.Users.AnyAsync(u => u.Id == id && !u.IsDeleted);
         }
+
+       public async Task<List<User>> GetUnapprovedGuides()
+        {
+            return await _context.Users
+                .Include(u => u.GuideProfile)
+                .Where(u=>u.Role=="Guide" &&
+                !u.IsDeleted &&
+                u.GuideProfile != null &&
+                u.GuideProfile.ISApproved==false)
+                .ToListAsync();
+
+        }
     }
 }
