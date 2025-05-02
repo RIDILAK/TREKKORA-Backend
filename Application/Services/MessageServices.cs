@@ -7,6 +7,8 @@ using Application.Dto;
 using Application.Interfaces;
 using AutoMapper;
 using Domain.Entities;
+using Microsoft.AspNetCore.SignalR;
+using TREKKORA_Backend.Hubs;
 
 namespace Application.Services
 {
@@ -22,11 +24,13 @@ namespace Application.Services
     {
         private readonly IMessageRepository _messageRepository;
         private readonly IMapper _mapper;
+        private readonly IHubContext<ChatHub>  _hubContext;
 
-        public MessageServices(IMessageRepository messageRepository, IMapper mapper)
+        public MessageServices(IMessageRepository messageRepository, IMapper mapper, IHubContext<ChatHub> hubContext)
         {
             _messageRepository = messageRepository;
             _mapper = mapper;
+            _hubContext = hubContext;
         }
 
         public async Task<Responses<MessageResponseDto>> AddMessageAsync(MessageCreateDto dto)
@@ -34,6 +38,9 @@ namespace Application.Services
             var mapped = _mapper.Map<Message>(dto);
             var saved = await _messageRepository.AddMessage(mapped);
             var responseDto = _mapper.Map<MessageResponseDto>(saved);
+
+            await _hubContext.Clients.User(dto.ReceiverId.ToString())
+             .SendAsync("recieveMessage", dto.SenderId, dto.MessageContent);
 
             return new Responses<MessageResponseDto>
             {

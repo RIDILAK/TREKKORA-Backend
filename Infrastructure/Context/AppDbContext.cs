@@ -28,6 +28,8 @@
 
         public DbSet<Message>Messages { get; set; }
 
+        public DbSet<Notification> Notification { get; set; }
+
 
             public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
