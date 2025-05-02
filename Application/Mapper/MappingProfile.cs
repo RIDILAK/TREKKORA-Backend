@@ -60,6 +60,8 @@ namespace Application.Mapper
                 .ReverseMap();
             CreateMap<Booking, UpdateBookingDatesDto>().ReverseMap();
             CreateMap<Booking,UpdateBookingStatusDto>().ReverseMap();
+            CreateMap<Message, MessageCreateDto>().ReverseMap();
+            CreateMap<Message,MessageResponseDto>().ReverseMap();
 
             
                

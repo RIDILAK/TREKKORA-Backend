@@ -10,6 +10,7 @@ using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using TREKKORA_Backend.Hubs;
 
 namespace TREKKORA_Backend
 {
@@ -72,7 +73,7 @@ namespace TREKKORA_Backend
             builder.Services.AddScoped<IRatingRepository, RatingRepository>();
             builder.Services.AddScoped<IBookingRepository, BookingRepository>();
             builder.Services.AddScoped<ISearchRepository, SearchReposiotry>();
-
+            builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
 
             builder.Services.AddScoped<IJwtServices, JwtServices>();
@@ -89,8 +90,11 @@ namespace TREKKORA_Backend
             builder.Services.AddScoped<IRatinServices,RatingService>();
             builder.Services.AddScoped<IBookingServices,BookinServices>();
             builder.Services.AddScoped<IsearchServices, SearchServices>();  
+            builder.Services.AddScoped<IMessageServices, MessageServices>();
+           
 
             builder.Services.AddAutoMapper(typeof(MappingProfile));
+            builder.Services.AddSignalR();
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
               .AddJwtBearer(options =>
@@ -118,11 +122,13 @@ namespace TREKKORA_Backend
             }
 
             app.UseHttpsRedirection();
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
 
             app.MapControllers();
+            app.MapHub<ChatHub>("/chathub");
 
             app.Run();
         }
