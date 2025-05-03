@@ -39,8 +39,8 @@ namespace Application.Services
             var saved = await _messageRepository.AddMessage(mapped);
             var responseDto = _mapper.Map<MessageResponseDto>(saved);
 
-            await _hubContext.Clients.User(dto.ReceiverId.ToString())
-             .SendAsync("recieveMessage", dto.SenderId, dto.MessageContent);
+            //await _hubContext.Clients.User(dto.ReceiverId.ToString())
+            // .SendAsync("recieveMessage", dto.SenderId, dto.MessageContent);
 
             return new Responses<MessageResponseDto>
             {

@@ -62,7 +62,7 @@ namespace Application.Mapper
             CreateMap<Booking,UpdateBookingStatusDto>().ReverseMap();
             CreateMap<Message, MessageCreateDto>().ReverseMap();
             CreateMap<Message,MessageResponseDto>().ReverseMap();
-            CreateMap<Notification, NotoficationDto>().ReverseMap();
+            CreateMap<Notification, NotificationDto>();
 
 
 
