@@ -57,6 +57,18 @@ namespace TREKKORA_Backend
                 });
 
             });
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    policy =>
+                    {
+                        policy.AllowAnyOrigin()
+                              .AllowAnyHeader()
+                              .AllowAnyMethod();
+                    });
+            });
+
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddInfrastructure(builder.Configuration);
@@ -123,6 +135,7 @@ namespace TREKKORA_Backend
             }
 
             app.UseHttpsRedirection();
+            app.UseCors("AllowAll");
             app.UseAuthentication();
 
             app.UseAuthorization();
