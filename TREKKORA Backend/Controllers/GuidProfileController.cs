@@ -36,7 +36,7 @@ namespace TREKKORA_Backend.Controllers
         }
 
         [HttpGet("All")]
-        [Authorize(Roles ="Admin,User")]
+        //[Authorize(Roles ="Admin,User")]
 
         public async Task<IActionResult> GetAll()
         {
