@@ -20,6 +20,7 @@ namespace Infrastructure.Repositories
         {
             return await _context.Users
                 .Include(u => u.GuideProfile)
+                .ThenInclude(p=>p.Place)
                 .Where(u => u.Role == "Guide" && !u.IsDeleted && u.GuideProfile != null)
                 
                 .ToListAsync();

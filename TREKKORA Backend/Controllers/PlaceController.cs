@@ -33,7 +33,7 @@
                 return StatusCode(result.StatuseCode,result);
             }
             [HttpGet("GetById")]
-            [Authorize(Roles ="Admin")]
+            [Authorize]
 
             public async Task <IActionResult>GetById(Guid id)
             {

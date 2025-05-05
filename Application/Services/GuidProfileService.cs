@@ -15,8 +15,8 @@ namespace Application.Services
 {
     public interface IGuideProfileService
     {
-        Task<Responses<List<GuideDto>>> GetAllGuides();
-        Task<Responses<GuideDto>> GetByIdGuides(Guid id);
+        Task<Responses<List<GetGuideDto>>> GetAllGuides();
+        Task<Responses<GetGuideDto>> GetByIdGuides(Guid id);
         Task<Responses<string>> AddProfile(GuideProfileDto guideProfile, IFormFile formFile, IFormFile formFile1, Guid id);
 
         Task<Responses<string>> UpdateProfile(Guid id, GuideDto guideDto, IFormFile formFile, IFormFile formFile1);
@@ -43,12 +43,12 @@ namespace Application.Services
             _mapper = mapper;
         }
 
-        public async Task<Responses<List<GuideDto>>> GetAllGuides()
+        public async Task<Responses<List<GetGuideDto>>> GetAllGuides()
         {
             var result = await _guideProfilerepository.GetAllGuidesAsync();
-            var guides = _mapper.Map<List<GuideDto>>(result);
+            var guides = _mapper.Map<List<GetGuideDto>>(result);
 
-            return new Responses<List<GuideDto>> { Data = guides, Message = "Fetched Guides", StatuseCode = 200 };
+            return new Responses<List<GetGuideDto>> { Data = guides, Message = "Fetched Guides", StatuseCode = 200 };
 
         }
 
@@ -65,16 +65,16 @@ namespace Application.Services
             return new Responses<string> { Message = "Guide Profile upload Succesfully", StatuseCode = 200 };
         }
 
-        public async Task<Responses<GuideDto>> GetByIdGuides(Guid id)
+        public async Task<Responses<GetGuideDto>> GetByIdGuides(Guid id)
         {
             var guide = await _guideProfilerepository.GetByIdAsync(id);
             if (guide == null)
             {
-                return new Responses<GuideDto> { Message = "Id not Found", StatuseCode = 401 };
+                return new Responses<GetGuideDto> { Message = "Id not Found", StatuseCode = 401 };
             }
 
-            var guideDto = _mapper.Map<GuideDto>(guide);
-            return new Responses<GuideDto> { StatuseCode = 200, Data = guideDto, Message = "Guide Fetched" };
+            var guideDto = _mapper.Map<GetGuideDto>(guide);
+            return new Responses<GetGuideDto> { StatuseCode = 200, Data = guideDto, Message = "Guide Fetched" };
 
 
         }

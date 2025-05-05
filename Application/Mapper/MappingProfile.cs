@@ -32,12 +32,21 @@ namespace Application.Mapper
                 .ForMember(dest => dest.StateId, opt => opt.MapFrom(src => Guid.Parse(src.StateId)));
             CreateMap<States,GetStateDto>()
                 .ForMember(dest=>dest.CountryName,opt=>opt.MapFrom(src=>src.Countries.CountryName));
+
             CreateMap<User, GuideDto>()
                 .ForMember(dest => dest.GuideProfileDto, opt => opt.MapFrom(src => src.GuideProfile)); ;
+
+            CreateMap<User, GetGuideDto>()
+                .ForMember(dest => dest.GetGuideProfileDto, opt => opt.MapFrom(src => src.GuideProfile));
+
+
             CreateMap<GuideProfile, GuideProfileDto>().ReverseMap();
+            
 
             CreateMap<GuideProfile,GetGuideProfileDto>()
                 .ForMember(dest => dest.PlaceName,opt=>opt.MapFrom(src=>src.Place.PlaceName));
+            CreateMap<GetGuideProfileDto, GuideProfile>();
+
 
             CreateMap<RatingGuideDto, Rating>();
 

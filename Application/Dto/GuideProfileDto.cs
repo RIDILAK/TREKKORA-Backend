@@ -10,6 +10,7 @@ namespace Application.Dto
     {
       
         public string Mobile { get; set; }
+     
         public Guid PlaceId { get; set; }
         public int Experience { get; set; }
         public string Languages { get; set; }
@@ -22,6 +23,7 @@ namespace Application.Dto
     {
 
         public string Mobile { get; set; }
+        public string ProfileImage { get; set; }
         public string PlaceName { get; set; }
         public int Experience { get; set; }
         public string Languages { get; set; }
@@ -36,6 +38,12 @@ namespace Application.Dto
         public string Name { get; set; }
         public string Email { get; set; }
         public GuideProfileDto GuideProfileDto { get; set; }
+      
+    }
+    public class GetGuideDto 
+    {
+     public string Name { get; set; }
+    public string Email { get; set; }
         public GetGuideProfileDto GetGuideProfileDto { get; set; }
     }
 }

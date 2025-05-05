@@ -41,6 +41,7 @@ namespace Domain.Entities
         public ICollection<Rating> Ratingss { get; set; }
         public ICollection<Rating> Ratings { get; set; }
         public ICollection<Booking> Bookings { get; set; }
+       
     }
 
 

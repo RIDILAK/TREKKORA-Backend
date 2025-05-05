@@ -56,20 +56,20 @@ namespace TREKKORA_Backend.Controllers
         [HttpPost("Add")]
         [Authorize(Roles ="Guide")]
 
-        public async Task<IActionResult> AddGuide([FromForm]  GuideProfileDto guideProfile, IFormFile image, IFormFile image2)
+        public async Task<IActionResult> AddGuide([FromForm]  GuideProfileDto guideProfile, IFormFile profileImage, IFormFile certificates)
         {
             var guideId=User.Claims.FirstOrDefault(x=>x.Type==ClaimTypes.NameIdentifier).Value;
-            var reult=await _guideProfileService.AddProfile( guideProfile, image, image2,(Guid.Parse(guideId)));
+            var reult=await _guideProfileService.AddProfile( guideProfile, profileImage, certificates, (Guid.Parse(guideId)));
             return StatusCode(reult.StatuseCode,reult);
         }
 
         [HttpPut("Update")]
         [Authorize(Roles ="Guide")]
 
-        public async Task<IActionResult> UpdateGuide([FromForm] GuideDto guideProfile, IFormFile image,IFormFile image2)
+        public async Task<IActionResult> UpdateGuide([FromForm] GuideDto guideProfile, IFormFile profileImage, IFormFile certificates)
         {
             var guideId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
-            var result = await _guideProfileService.UpdateProfile((Guid.Parse(guideId)),guideProfile, image, image2);
+            var result = await _guideProfileService.UpdateProfile((Guid.Parse(guideId)),guideProfile, profileImage, certificates);
             return StatusCode(result.StatuseCode, result);
         }
 
