@@ -19,14 +19,24 @@ namespace Infrastructure.Repositories
         {
             _appDbContext = appDbContext;
         }
-       public async Task AddPlaceAsync(Place place)
+       public async Task AddPlaceAsync(Place place, byte[]imageData,string fileName,string contentType )
         {
+            var images = new Images
+            {
+                Id = Guid.NewGuid(),
+                PlaceId = place.Id,
+                ImageData = imageData,
+                ContentType = contentType,
+                FileName = fileName,
+            };
             await _appDbContext.Places.AddAsync(place);
+            await _appDbContext.Images.AddAsync(images);
             await _appDbContext.SaveChangesAsync();
         }
         public async Task<List<Place>> GetAllActivePlacesAsync()
         {
             return await _appDbContext.Places
+                .Include(p=>p.Images)
                 .Include(p => p.State)
                 .ThenInclude(s=>s.Countries)
                 .Where(p => !p.IsDeleted)
@@ -36,6 +46,7 @@ namespace Infrastructure.Repositories
         public async Task<Place> GetPlaceByIdAsync(Guid id)
         {
             return await _appDbContext.Places
+                .Include(p=>p.Images)
                 .Include(p => p.State)
                 .ThenInclude(s=>s.Countries)
                 .FirstOrDefaultAsync(p => p.Id == id && !p.IsDeleted);
@@ -44,6 +55,7 @@ namespace Infrastructure.Repositories
         public async Task<List<Place>> GetPlacesByStateIdAsync(Guid stateId)
         {
             return await _appDbContext.Places
+                .Include(p => p.Images)
                 .Include(p => p.State)
                 .ThenInclude (s=>s.Countries)
                 .Where(p => p.StateId == stateId && !p.IsDeleted)
@@ -52,6 +64,7 @@ namespace Infrastructure.Repositories
         public async Task<List<Place>> GetPlacesByCountryIdAsync(Guid countryId)
         {
             return await _appDbContext.Places
+                .Include(p => p.Images)
                 .Include(p=>p.State)
                 .ThenInclude(s=>s.Countries)
                 .Where(p => p.State.CountryId == countryId && !p.IsDeleted)

@@ -45,7 +45,7 @@ namespace Infrastructure.Repositories
                Id = p.Id
            }).ToListAsync();
 
-            return guides.Concat(places).ToList();
+            return guides.Concat(places).ToList(); 
         }
     }
 }

@@ -23,10 +23,14 @@ namespace Application.Mapper
             CreateMap<AddPlaceDto, Place>();
             CreateMap<States,UpdateStateDto>().ReverseMap();
             CreateMap<Place, PlaceDto>()
-            .ForMember(dest => dest.StateId, opt => opt.MapFrom(src => src.StateId.ToString()))
-            .ForMember(dest => dest.StateName, opt => opt.MapFrom(src => src.State.StateName))
-            .ForMember(dest => dest.CountryName, opt => opt.MapFrom(src => src.State.Countries.CountryName))
-            .ForMember(dest=>dest.CountryCode,opt =>opt.MapFrom(src=>src.State.Countries.CountryCode));
+                .ForMember(dest => dest.StateId, opt => opt.MapFrom(src => src.StateId.ToString()))
+                .ForMember(dest => dest.StateName, opt => opt.MapFrom(src => src.State.StateName))
+                .ForMember(dest => dest.CountryName, opt => opt.MapFrom(src => src.State.Countries.CountryName))
+                .ForMember(dest => dest.CountryCode, opt => opt.MapFrom(src => src.State.Countries.CountryCode))
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src =>
+                    src.Images.ImageData
+                ));
+
 
             CreateMap<AddPlaceDto, Place>()
                 .ForMember(dest => dest.StateId, opt => opt.MapFrom(src => Guid.Parse(src.StateId)));
@@ -72,11 +76,6 @@ namespace Application.Mapper
             CreateMap<Message, MessageCreateDto>().ReverseMap();
             CreateMap<Message,MessageResponseDto>().ReverseMap();
             CreateMap<Notification, NotificationDto>();
-
-
-
-
-
         }
     }
 }

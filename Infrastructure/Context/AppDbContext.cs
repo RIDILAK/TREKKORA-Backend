@@ -30,6 +30,8 @@
 
         public DbSet<Notification> Notification { get; set; }
 
+        public DbSet<Images> Images { get; set; }
+
 
             public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -117,6 +119,11 @@
               .WithOne(b => b.User)
               .HasForeignKey(b => b.UserId)
               .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Place>()
+                .HasOne(p => p.Images)
+                .WithOne(i => i.Place)
+                .HasForeignKey<Images>(i => i.PlaceId);
 
             }
     

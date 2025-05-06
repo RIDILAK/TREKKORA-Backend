@@ -29,6 +29,10 @@ namespace Application.Services
             }
 
             var result = await _repository.SearchAsync(query);
+            if (result == null)
+            {
+                return new Responses<List<SearchResultDto>> { Message = "result not found", StatuseCode = 400 };
+            }
             return new Responses<List<SearchResultDto>> { Message = "Search completed", Data = result, StatuseCode = 200 };
 
         }

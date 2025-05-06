@@ -16,7 +16,7 @@ namespace Application.Dto
 
         public string CountryCode { get; set; }
         public string StateName { get; set; }
-        public string ImageUrl { get;set; }
+        public byte[] ImageUrl { get;set; }
         public int MinimumDays { get; set; }
         public string Pincode { get; set; }
 

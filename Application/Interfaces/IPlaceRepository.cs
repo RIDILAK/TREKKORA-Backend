@@ -10,7 +10,7 @@ namespace Application.Interfaces
 {
     public interface IPlaceRepository
     {
-        Task AddPlaceAsync(Place place);
+        Task AddPlaceAsync(Place place, byte[] imageData, string fileName, string contentType);
         Task<List<Place>> GetAllActivePlacesAsync();
         Task<Place> GetPlaceByIdAsync(Guid id);
         Task<List<Place>> GetPlacesByStateIdAsync(Guid stateId);

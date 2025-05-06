@@ -45,7 +45,7 @@ namespace TREKKORA_Backend.Controllers
         }
 
         [HttpGet("GetById")]
-        [Authorize(Roles ="Admin")]
+        [Authorize]
 
         public async Task<IActionResult>GetByIdGuid(Guid id)
         {

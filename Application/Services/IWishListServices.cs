@@ -78,7 +78,7 @@ namespace Application.Services
                         PlaceId = x.PlaceId,
                         PlaceName = x.Place.PlaceName,
                       BestTimeToTravel=x.Place.BestTimeToTravel,
-                      ImageUrl=x.Place.ImageUrl,
+                      //ImageUrl=x.Place.ImageUrl,
                         Description = x.Place.Description,
                        
                     }).ToList();

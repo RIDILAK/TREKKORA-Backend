@@ -26,6 +26,7 @@ namespace Application.Services
         Task<Responses<List<PlaceDto>>> GetPlacesByCountryIdAsync(Guid countryId);
         Task <Responses<string>> UpdatePlaceAsync(Guid id, AddPlaceDto updatedPlace, IFormFile image);
         Task<Responses<string>>DeletePlace(Guid id);
+        Task<byte[]> ConvertToBytes(IFormFile image);
     }
     public class PlaceServices:IPlaceServices
     {
@@ -72,15 +73,32 @@ namespace Application.Services
             var result= _mapper.Map<PlaceDto>(places);
             return new Responses<PlaceDto> { Data= result,Message="Place Fetched",StatuseCode=200 };
         }
+
+       public async Task<byte[]> ConvertToBytes(IFormFile image)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                await image.CopyToAsync(memoryStream);
+                return memoryStream.ToArray();
+            }
+        }
+
+
         public async Task<Responses<string>> AddPlaceAsync(AddPlaceDto placeDto, IFormFile image)
         {
-            var imageUrl = await _cloudinaryRepository.UploadImage(image);
+            //var imageUrl = await _cloudinaryRepository.UploadImage(image);
             var place = _mapper.Map<Place>(placeDto);
-            place.ImageUrl = imageUrl;
+            //place.ImageUrl = imageUrl;
+            var imageData=await ConvertToBytes(image);
+            if (place.Images == null)
+            {
+                place.Images = new Images(); // Make sure the Images property is not null
+            }
+            place.ImageUrl = Convert.ToBase64String(imageData.ToArray()); 
             place.Id = Guid.NewGuid();
             place.CreatedAt = DateTime.UtcNow;
 
-            await _placeRepository.AddPlaceAsync(place);
+            await _placeRepository.AddPlaceAsync(place,imageData,image.FileName,image.ContentType);
             return new Responses<string> { Message = "Place added successfully", StatuseCode = 200 };
         }
 
@@ -126,7 +144,7 @@ namespace Application.Services
 
            
                 var imageUrl = await _cloudinaryRepository.UploadImage(image);
-                existingPlace.ImageUrl = imageUrl;
+                //existingPlace.ImageUrl = imageUrl;
             
 
             existingPlace.PlaceName = updatedPlace.PlaceName;

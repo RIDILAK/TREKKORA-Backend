@@ -36,5 +36,7 @@ namespace Domain.Entities
 
         public ICollection<Booking> Bookings { get; set; }
 
+        public Images Images { get; set; }
+
     }
 }

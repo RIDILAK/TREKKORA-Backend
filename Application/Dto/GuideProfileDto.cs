@@ -21,7 +21,7 @@ namespace Application.Dto
     }
     public class GetGuideProfileDto
     {
-
+        public string GuideId { get; set; }
         public string Mobile { get; set; }
         public string ProfileImage { get; set; }
         public string PlaceName { get; set; }
