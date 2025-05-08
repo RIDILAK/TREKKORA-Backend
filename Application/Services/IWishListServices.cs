@@ -36,7 +36,7 @@ namespace Application.Services
             var placeExist = await _repository.PlaceExistsAsync(placeId);
             if (placeExist == null)
             {
-                return new Responses<string> { Message = "Place is not exist", StatuseCode = 200 };
+                return new Responses<string> { Message = "Place is not exist", StatuseCode = 400 };
 
             }
 
@@ -77,8 +77,9 @@ namespace Application.Services
                         WishListId = x.Id, 
                         PlaceId = x.PlaceId,
                         PlaceName = x.Place.PlaceName,
+                        Price = x.Place.Price.ToString(),
                       BestTimeToTravel=x.Place.BestTimeToTravel,
-                      //ImageUrl=x.Place.ImageUrl,
+                      ImageUrl=x.Place.ImageUrl,
                         Description = x.Place.Description,
                        
                     }).ToList();

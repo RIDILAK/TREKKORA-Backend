@@ -25,8 +25,9 @@ namespace Domain.Entities
         public string Bio { get; set; }
         public string WhyTravelWithMe { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; } 
+        public DateTime UpdatedAt { get; set; }
 
+        public bool isAvailable { get; set; } = true;
         public bool ISApproved {  get; set; }=false;
 
         public User User { get; set; }

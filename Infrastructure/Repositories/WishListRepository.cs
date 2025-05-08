@@ -39,7 +39,9 @@ namespace Infrastructure.Repositories
 
         public async Task<List<WishList>> GetWishListByUserIdAsync(Guid userId)
         {
-            return await _appDbContext.WishList.Include(c => c.Place).Where(x => x.UserId == userId).ToListAsync();
+            return await _appDbContext.WishList.Include(c => c.Place)
+                .ThenInclude(c=>c.Images)
+                .Where(x => x.UserId == userId).ToListAsync();
         }
         public async Task<bool> PlaceExistsAsync(Guid placeId)
         {

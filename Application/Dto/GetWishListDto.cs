@@ -12,7 +12,7 @@ namespace Application.Dto
         public Guid PlaceId { get; set; }
         public string PlaceName { get; set; }
         public string BestTimeToTravel { get; set; }
-
+        public string Price { get; set; }
         public string ImageUrl { get; set; }
         public string Description { get; set; }
 

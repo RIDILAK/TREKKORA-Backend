@@ -29,6 +29,7 @@ namespace Application.Dto
         public string Languages { get; set; }
         public string AreasCovered { get; set; }
 
+        public bool isAvailable { get; set; }
         public string Bio { get; set; }
         public string WhyTravelWithMe { get; set; }
     }

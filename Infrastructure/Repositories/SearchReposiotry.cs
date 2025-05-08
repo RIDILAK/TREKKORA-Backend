@@ -36,6 +36,7 @@ namespace Infrastructure.Repositories
     .ToListAsync();
 
             var places = await _context.Places
+                .Include(c=>c.Images)
            .Where(p => p.PlaceName.ToLower().Contains(query))
            .Select(p => new SearchResultDto
            {

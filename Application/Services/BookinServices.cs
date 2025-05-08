@@ -61,7 +61,8 @@ namespace Application.Services
                 return new Responses<string> { Message = "User Not Found", StatuseCode = 400 };
             }
 
-            var guide = _userRepository.GetByIdAsync(dto.GuideId);
+            var guide =await _userRepository.GetByIdAsync(dto.GuideId);
+            
             if (guide == null)
             {
 
@@ -94,7 +95,8 @@ namespace Application.Services
                 CreatedAt = DateTime.Now,
             };
             await _bookingrepository.AddAsync(booking);
-            return new Responses<string> { Message = "Booking Creatd Succesfully", StatuseCode = 200 };
+            guide.GuideProfile.isAvailable=false;
+            return new Responses<string> { Message = "Booking Created Succesfully", StatuseCode = 200 };
 
 
 

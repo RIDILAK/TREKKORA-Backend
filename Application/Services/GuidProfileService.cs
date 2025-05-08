@@ -45,8 +45,12 @@ namespace Application.Services
 
         public async Task<Responses<List<GetGuideDto>>> GetAllGuides()
         {
-            var result = await _guideProfilerepository.GetAllGuidesAsync();
-            var guides = _mapper.Map<List<GetGuideDto>>(result);
+
+            var guide = await _guideProfilerepository.GetAllGuidesAsync();
+
+           
+
+            var guides = _mapper.Map<List<GetGuideDto>>(guide);
 
             return new Responses<List<GetGuideDto>> { Data = guides, Message = "Fetched Guides", StatuseCode = 200 };
 
