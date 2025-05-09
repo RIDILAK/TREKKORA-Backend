@@ -14,6 +14,7 @@ namespace Application.Services
     {
         Task<Responses<string>> AddBookingAsync(AddBookingDto dto, Guid userId);
         Task<Responses<List<GetBookingDto>>> GetAllBookingUser(Guid userId);
+        Task<Responses<GetBookingDto>> GetBookingById(Guid bookingId);
         Task<Responses<List<GetBookingDto>>> GetAllBookingGuid(Guid guideId);
         Task<Responses<List<GetBookingDto>>> GetAllBookingPlace(Guid placeId);
         Task<Responses<List<GetBookingDto>>> GetAllPendingBooking(Guid guideId);
@@ -112,6 +113,16 @@ namespace Application.Services
             }
             var mapped = _mapper.Map<List<GetBookingDto>>(booking);
             return new Responses<List<GetBookingDto>> { Data = mapped, Message = "Fetched", StatuseCode = 200 };
+        }
+      public  async Task<Responses<GetBookingDto>> GetBookingById(Guid bookingId)
+        {
+            var booking = await _bookingrepository.GetByIdAsync(bookingId);
+            if (booking == null)
+            {
+                return new Responses<GetBookingDto> { Message = "Booking Id Not Found", StatuseCode = 400 };
+            }
+            var mapped = _mapper.Map<GetBookingDto>(booking);
+            return new Responses<GetBookingDto> { Data = mapped, Message = "Fetched", StatuseCode = 200 };
         }
 
         public async Task<Responses<List<GetBookingDto>>> GetAllBookingPlace(Guid placeId)
