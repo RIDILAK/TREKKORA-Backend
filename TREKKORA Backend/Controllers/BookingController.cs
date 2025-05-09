@@ -54,7 +54,7 @@ namespace TREKKORA_Backend.Controllers
             return StatusCode(result.StatuseCode, result);
         }
         [HttpGet("Place")]
-        [Authorize(Roles ="Admin")]
+        //[Authorize(Roles ="Admin")]
 
         public async Task<IActionResult>GetBookingPlace(Guid placeId)
         {

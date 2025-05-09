@@ -45,6 +45,15 @@ namespace Infrastructure.Repositories
 
         }
 
+        public async Task<Booking>GetByPlace(Guid placeId)
+        {
+            return await _appDbContext.Bookings
+                .Include(b => b.place)
+                .Include(b => b.Guide)
+                //.Include(b => b.User)
+                .FirstOrDefaultAsync(x => x.PlaceId == placeId);
+        }
+
         public async Task<List<Booking>> GetAllUserBooking(Guid userId)
         {
             return await _appDbContext.Bookings

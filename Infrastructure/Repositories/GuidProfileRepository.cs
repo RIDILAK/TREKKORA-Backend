@@ -33,9 +33,16 @@ namespace Infrastructure.Repositories
         public async Task<User> GetByIdAsync(Guid id)
         {
             return await _context.Users.Include(u => u.GuideProfile)
-                .FirstOrDefaultAsync(u => u.Id == id && u.Role == "Guide" && !u.IsDeleted);
+                .FirstOrDefaultAsync(u => u.Id == id && u.Role == "Guide" && !u.IsDeleted)
+                ;
         }
 
+        public async Task<List<User>>GetByPlace(Guid placeId)
+        {
+            return await _context.Users.Include(u => u.GuideProfile)
+                .Where(u => u.GuideProfile.PlaceId == placeId && u.Role == "Guide" && !u.IsDeleted  && u.GuideProfile.ISApproved == true && u.GuideProfile.isAvailable == true)
+                .ToListAsync();
+        }
         public async Task AddAsync(User user)
         {
             await _context.Users.AddAsync(user);

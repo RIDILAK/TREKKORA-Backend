@@ -20,6 +20,7 @@ namespace Application.Interfaces
         Task<List<Booking>>GetByIdPlaceAsync(Guid placeId);
 
         Task<List<Booking>> GetPendingRequest(Guid guideId);
+        Task<Booking> GetByPlace(Guid placeId);
     }
     
 }

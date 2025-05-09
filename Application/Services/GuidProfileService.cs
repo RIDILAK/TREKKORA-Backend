@@ -25,6 +25,7 @@ namespace Application.Services
         Task<Responses<string>> ToggleBlockGuide(Guid id);
         Task<Responses<bool>>ApprovedGuide(Guid GuideId);
         Task<Responses<List<GuideDto>>> GetUnapprovedGuides();
+        Task<Responses<List<GetGuideDto>>> GetByPlace(Guid placeId);
 
 
     }
@@ -56,6 +57,8 @@ namespace Application.Services
 
         }
 
+
+
         public async Task<Responses<string>> AddProfile(GuideProfileDto guideProfile, IFormFile formFile, IFormFile formFile1, Guid id)
         {
             string uploadedProfileImage = await _cloudinaryServices.UploadImage(formFile);
@@ -81,6 +84,22 @@ namespace Application.Services
             return new Responses<GetGuideDto> { StatuseCode = 200, Data = guideDto, Message = "Guide Fetched" };
 
 
+        }
+
+        public async Task<Responses<List<GetGuideDto>>> GetByPlace(Guid placeId)
+        {
+            var guide = await _guideProfilerepository.GetByPlace(placeId);
+            if (guide == null)
+            {
+                return new Responses<List<GetGuideDto>> { Message = "no Guides Found", StatuseCode = 401 };
+
+            }
+            //if (guide.GuideProfile?.ISApproved != true)
+            //{
+            //    return new Responses<string> { Message = "Guide not approved yet", StatuseCode = 403 };
+            //}
+            var guideDto = _mapper.Map<List<GetGuideDto>>(guide);
+            return new Responses<List<GetGuideDto>> { Data = guideDto, Message = "GudeByPlaceFetched", StatuseCode = 200 };
         }
 
         public async Task<Responses<string>> UpdateProfile(Guid id, GuideDto guideDto, IFormFile formFile, IFormFile formFile1)

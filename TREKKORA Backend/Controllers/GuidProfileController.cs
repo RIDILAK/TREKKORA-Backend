@@ -36,6 +36,7 @@ namespace TREKKORA_Backend.Controllers
         }
 
         [HttpGet("All")]
+        //[Authorize]
         //[Authorize(Roles ="Admin,User")]
 
         public async Task<IActionResult> GetAll()
@@ -53,6 +54,15 @@ namespace TREKKORA_Backend.Controllers
             var result= await _guideProfileService.GetByIdGuides(id);
             return StatusCode(result.StatuseCode,result);
         }
+        [HttpGet("GetByPlace")]
+        [Authorize]
+        public async Task <IActionResult>GetByPlace(Guid placeId)
+        {
+            var result= await _guideProfileService.GetByPlace(placeId);
+            return StatusCode(result.StatuseCode,result);
+        }
+
+
         [HttpPost("Add")]
         [Authorize(Roles ="Guide")]
 
