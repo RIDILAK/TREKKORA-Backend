@@ -14,7 +14,7 @@ namespace Application.Services
     {
         Task<Responses<string>> AddBookingAsync(AddBookingDto dto, Guid userId);
         Task<Responses<List<GetBookingDto>>> GetAllBookingUser(Guid userId);
-        Task<Responses<GetBookingDto>> GetBookingById(Guid bookingId);
+        Task<Responses<GetBookingDto>>GetBookingById(Guid bookingId);
         Task<Responses<List<GetBookingDto>>> GetAllBookingGuid(Guid guideId);
         Task<Responses<List<GetBookingDto>>> GetAllBookingPlace(Guid placeId);
         Task<Responses<List<GetBookingDto>>> GetAllPendingBooking(Guid guideId);
@@ -97,7 +97,7 @@ namespace Application.Services
             };
             await _bookingrepository.AddAsync(booking);
             guide.GuideProfile.isAvailable=false;
-            return new Responses<string> { Message = "Booking Created Succesfully", StatuseCode = 200 };
+            return new Responses<string> { Message = "Booking Created Succesfully", StatuseCode = 200,Data=booking.BookingId.ToString() };
 
 
 
@@ -106,13 +106,13 @@ namespace Application.Services
 
         public async Task<Responses<List<GetBookingDto>>> GetAllBookingUser(Guid userId)
         {
-            var booking = await _bookingrepository.GetAllAsync();
+            var booking = await _bookingrepository.GetAllUserBooking(userId);
             if (booking == null)
             {
                 return new Responses<List<GetBookingDto>> { Message = "User Not Found", StatuseCode = 400 };
             }
             var mapped = _mapper.Map<List<GetBookingDto>>(booking);
-            return new Responses<List<GetBookingDto>> { Data = mapped, Message = "Fetched", StatuseCode = 200 };
+            return new Responses<List<GetBookingDto>>{ Data = mapped, Message = "Fetched", StatuseCode = 200 };
         }
       public  async Task<Responses<GetBookingDto>> GetBookingById(Guid bookingId)
         {
@@ -223,10 +223,10 @@ namespace Application.Services
                 return new Responses<string> { Message = "Bookin Not Found", StatuseCode = 400 };
 
             }
-            if (!booking.Status.Equals("Approved", StringComparison.OrdinalIgnoreCase))
-            {
-                return new Responses<string> { Message = "Booking can only be deleted after guide approval.", StatuseCode = 403 };
-            }
+            //if (!booking.Status.Equals("Approved", StringComparison.OrdinalIgnoreCase))
+            //{
+            //    return new Responses<string> { Message = "Booking can only be deleted after guide approval.", StatuseCode = 403 };
+            //}
 
             await _bookingrepository.DeleteAsync(booking);
             return new Responses<string> { Message = "Booking Deleted Succesfully", StatuseCode = 200 };

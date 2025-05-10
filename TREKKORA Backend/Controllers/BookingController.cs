@@ -46,11 +46,14 @@ namespace TREKKORA_Backend.Controllers
             return StatusCode(result.StatuseCode, result);
         }
         [HttpGet("User")]
-        [Authorize(Roles ="User,Admin")]
+        //[Authorize(Roles ="User,Admin")]
+        [Authorize]
 
-        public async Task<IActionResult>GetBookingUser(Guid userId)
+        public async Task<IActionResult>GetBookingUser()
         {
-            var result=await _services.GetAllBookingUser(userId);
+            var userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            var result=await _services.GetAllBookingUser(Guid.Parse(userId));
+
             return StatusCode(result.StatuseCode,result);
         }
         [HttpGet("GetBookingStatus")]
@@ -112,7 +115,7 @@ namespace TREKKORA_Backend.Controllers
         }
 
         [HttpDelete("Delete")]
-        [Authorize(Roles ="User")]
+        //[Authorize(Roles ="User")]
 
         public async Task<IActionResult>DeleteBooking(Guid id)
         {

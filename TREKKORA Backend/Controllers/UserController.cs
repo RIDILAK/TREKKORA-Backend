@@ -28,7 +28,7 @@ namespace TREKKORA_Backend.Controllers
             var result= await _userServices.GetAllUsersAsync();
             return StatusCode(result.StatuseCode, result);
         }
-        [HttpGet("userById")]
+        [HttpGet("userByIdAdmin")]
         [Authorize(Roles ="Admin")]
 
         public async Task<IActionResult>GetUserById(Guid id)
@@ -36,8 +36,18 @@ namespace TREKKORA_Backend.Controllers
             var result= await _userServices.GetById(id);
             return StatusCode(result.StatuseCode,result);
         }
+        [HttpGet("GetById")]
+        [Authorize]
+        public async Task<IActionResult> GetById()
+        {
+            var id = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            var result = await _userServices.GetById(Guid.Parse(id));
+            return StatusCode(result.StatuseCode,result );
+        }
+
         [HttpDelete("DeleteUser")]
-        [Authorize(Roles ="User")]
+        [Authorize(Roles = "User")]
+        
 
         public async Task<IActionResult>DeleteUser() { 
 
