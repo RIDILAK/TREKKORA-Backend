@@ -25,8 +25,10 @@ namespace Application.Dto
 
         public Guid PlaceId { get; set; }
         public string PlaceName { get; set; }
+        public string PlaceImage {  get; set; }
         public Guid GuideId { get; set; }
         public string GuideName { get; set; }
+        public string GuideImage {  get; set; }
         public int NumberOfPeople { get; set; }
         public decimal TotalPrice { get; set; }
         public DateTime BookingDate { get; set; }

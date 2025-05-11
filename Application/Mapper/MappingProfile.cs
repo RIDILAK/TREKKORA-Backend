@@ -69,7 +69,9 @@ namespace Application.Mapper
             CreateMap<Booking, GetBookingDto>()
                 .ForMember(dest=>dest.UserName,opt=>opt.MapFrom(src=>src.User.Name))
                 .ForMember(dest => dest.PlaceName, opt => opt.MapFrom(src=>src.place.PlaceName))
+                .ForMember(dest=>dest.PlaceImage,opt=>opt.MapFrom(src=>src.place.ImageUrl))
                 .ForMember(dest=>dest.GuideName,opt=>opt.MapFrom(src=>src.Guide.Name))
+                .ForMember(dest=>dest.GuideImage,opt=>opt.MapFrom(src=>src.Guide.GuideProfile.ProfileImage))
                 .ReverseMap();
             CreateMap<Booking, UpdateBookingDatesDto>().ReverseMap();
             CreateMap<Booking,UpdateBookingStatusDto>().ReverseMap();

@@ -59,7 +59,7 @@ namespace Infrastructure.Repositories
             return await _appDbContext.Bookings
                 .Include(b=>b.place)
                 .Include(b=>b.User)
-                .Include(b=>b.Guide)
+                .Include(b=>b.Guide.GuideProfile)
                 .Where(b=>b.UserId == userId)
                 .ToListAsync();
 
