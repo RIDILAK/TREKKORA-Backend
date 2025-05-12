@@ -74,7 +74,7 @@ namespace Application.Services
 
             if (TotalDays < place.MinimumDays)
             {
-                return new Responses<string> { Message = $"You Must book atleast{place.MinimumDays} days for the trip." };
+                return new Responses<string> { StatuseCode=400, Message = $"You Must book atleast{place.MinimumDays} days for the trip." };
 
 
             }
@@ -96,7 +96,8 @@ namespace Application.Services
                 CreatedAt = DateTime.Now,
             };
             await _bookingrepository.AddAsync(booking);
-            guide.GuideProfile.isAvailable=false;
+            //guide.GuideProfile.isAvailable=false;
+            await _bookingrepository.updateGuideAvailability(dto.GuideId);
             return new Responses<string> { Message = "Booking Created Succesfully", StatuseCode = 200,Data=booking.BookingId.ToString() };
 
 

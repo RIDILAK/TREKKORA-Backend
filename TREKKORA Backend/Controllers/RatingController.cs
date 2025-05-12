@@ -39,7 +39,7 @@ namespace TREKKORA_Backend.Controllers
         }
 
         [HttpGet("Guide")]
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles ="Admin,User")]
 
         public async Task<IActionResult>GetRatingForGuide(Guid GuidId)
         {
@@ -48,7 +48,7 @@ namespace TREKKORA_Backend.Controllers
         }
 
         [HttpGet("Place")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,User")]
 
         public async Task<IActionResult>GetRatingForPlace(Guid PlaceId)
         {
@@ -57,7 +57,7 @@ namespace TREKKORA_Backend.Controllers
         }
 
         [HttpGet("User")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,User")]
 
         public async Task<IActionResult>GetRatingByUser(Guid UserId)
         {

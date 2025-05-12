@@ -10,6 +10,7 @@ namespace Application.Interfaces
     public interface IBookingRepository
     {
         Task AddAsync(Booking booking);
+        Task updateGuideAvailability(Guid guideId);
         Task<List<Booking>> GetAllAsync();
         Task<List<Booking>> GetAllUserBooking(Guid UserId);
         Task<List<Booking>>GetAllGuideBooking(Guid GuideId);

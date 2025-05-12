@@ -33,6 +33,16 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
 
         }
+        public async Task updateGuideAvailability(Guid guideId)
+        {
+            var guide= await _appDbContext.Users
+                .Include(x => x.GuideProfile)
+                .FirstOrDefaultAsync(x => x.GuideProfile.GuideId == guideId);
+            guide.GuideProfile.isAvailable=false;
+            await _appDbContext.SaveChangesAsync();
+            
+
+        }
 
         public async Task<Booking> GetByIdAsync(Guid bookingId)
         {
