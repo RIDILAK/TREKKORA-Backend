@@ -63,6 +63,16 @@ namespace Application.Services
         {
             string uploadedProfileImage = await _cloudinaryServices.UploadImage(formFile);
             string uploadedCertificateImage = await _cloudinaryServices.UploadImage(formFile1);
+
+            var existingGuide = await _guideProfilerepository.GetByIdAsync(id);
+            if (existingGuide != null)
+            {
+                return new Responses<string>
+                {
+                    Message = "You have already uploaded your profile",
+                    StatuseCode = 409 
+                };
+            }
             var guides = _mapper.Map<GuideProfile>(guideProfile);
             guides.ProfileImage = uploadedProfileImage;
             guides.Certificates = uploadedCertificateImage;
@@ -99,10 +109,14 @@ namespace Application.Services
             //    return new Responses<string> { Message = "Guide not approved yet", StatuseCode = 403 };
             //}
             var guideDto = _mapper.Map<List<GetGuideDto>>(guide);
-            return new Responses<List<GetGuideDto>> { Data = guideDto, Message = "GudeByPlaceFetched", StatuseCode = 200 };
+            return new Responses<List<GetGuideDto>> { Data = guideDto, Message = "GuideByPlaceFetched", StatuseCode = 200 };
         }
 
-        public async Task<Responses<string>> UpdateProfile(Guid id, GuideDto guideDto, IFormFile formFile, IFormFile formFile1)
+     
+
+
+
+public async Task<Responses<string>> UpdateProfile(Guid id, GuideDto guideDto, IFormFile formFile, IFormFile formFile1)
         {
             var guide = await _guideProfilerepository.GetByIdAsync(id);
             if (guide == null)

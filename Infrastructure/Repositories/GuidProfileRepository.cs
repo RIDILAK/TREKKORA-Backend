@@ -33,6 +33,7 @@ namespace Infrastructure.Repositories
         public async Task<User> GetByIdAsync(Guid id)
         {
             return await _context.Users.Include(u => u.GuideProfile)
+                .ThenInclude(u=>u.Place)
                 .FirstOrDefaultAsync(u => u.Id == id && u.Role == "Guide" && !u.IsDeleted)
                 ;
         }

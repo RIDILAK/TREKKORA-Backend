@@ -85,7 +85,7 @@ namespace Application.Services
 
                 var token = _jwtServices.GenerateToken(user);
 
-                return new Responses<string> { Data = token, Message = "Login Succesfully", StatuseCode = 200 };
+                return new Responses<string> { Data = token, Message = user.Role, StatuseCode = 200 };
             }
             catch (Exception ex)
             {

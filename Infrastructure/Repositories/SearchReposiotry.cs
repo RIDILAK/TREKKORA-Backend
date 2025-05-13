@@ -23,21 +23,29 @@ namespace Infrastructure.Repositories
         {
             query = query.ToLower();
 
-            var guides = await _context.Users
-                .Include(p=>p.GuideProfile)
-    .Where(u => u.Role == "Guide" && u.Name.ToLower().Contains(query))
-    .Select(u => new SearchResultDto
-    {
-        Type = "Guide",
-        Name = u.Name,
-        ImageUrl = u.GuideProfile.ProfileImage,
-        Id = u.Id
-    })
-    .ToListAsync();
+  var guides = await _context.Users
+        .Include(u => u.GuideProfile)
+        .Where(u =>
+            u.Role == "Guide" &&
+            u.Name.ToLower().Contains(query) &&
+            u.GuideProfile != null &&
+            u.GuideProfile.isAvailable &&
+            u.GuideProfile.ISApproved
+        )
+        .Select(u => new SearchResultDto
+        {
+            Type = "Guide",
+            Name = u.Name,
+            ImageUrl = u.GuideProfile.ProfileImage,
+            Id = u.Id
+        })
+        .ToListAsync();
 
             var places = await _context.Places
                 .Include(c=>c.Images)
-           .Where(p => p.PlaceName.ToLower().Contains(query))
+           .Where(p => p.PlaceName.ToLower().Contains(query)
+           && !p.IsDeleted)
+           
            .Select(p => new SearchResultDto
            {
                Type = "Place",
