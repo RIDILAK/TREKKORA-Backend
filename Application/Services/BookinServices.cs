@@ -19,7 +19,7 @@ namespace Application.Services
         Task<Responses<List<GetBookingDto>>> GetAllBookingPlace(Guid placeId);
         Task<Responses<List<GetBookingDto>>> GetAllPendingBooking(Guid guideId);
         Task<Responses<List<GetBookingDto>>> GetAllBooking();
-        Task<Responses<string>> UpdateBookingStatusAsync(Guid Id, UpdateBookingStatusDto dto);
+        Task<Responses<string>> UpdateBookingStatusAsync(Guid guideId, Guid Id, UpdateBookingStatusDto dto);
 
         Task<Responses<string>> UpdateBookingDatesAsync(Guid id, UpdateBookingDatesDto dto);
 
@@ -79,7 +79,7 @@ namespace Application.Services
 
             }
 
-            decimal totalPrice = dto.NumberOfPeople * place.Price;
+            decimal totalPrice = dto.NumberOfPeople * place.Price * TotalDays;
 
             var booking = new Booking
             {
@@ -97,7 +97,7 @@ namespace Application.Services
             };
             await _bookingrepository.AddAsync(booking);
             //guide.GuideProfile.isAvailable=false;
-            await _bookingrepository.updateGuideAvailability(dto.GuideId);
+            
             return new Responses<string> { Message = "Booking Created Succesfully", StatuseCode = 200,Data=booking.BookingId.ToString() };
 
 
@@ -166,7 +166,7 @@ namespace Application.Services
 
         }
 
-        public async Task<Responses<string>> UpdateBookingStatusAsync(Guid Id, UpdateBookingStatusDto dto)
+        public async Task<Responses<string>> UpdateBookingStatusAsync( Guid guideId, Guid Id, UpdateBookingStatusDto dto)
         {
             var booking = await _bookingrepository.GetByIdAsync(Id);
             if (booking == null)
@@ -176,6 +176,7 @@ namespace Application.Services
 
             booking.Status = dto.Status;
             await _bookingrepository.UpdateAsync(booking);
+            await _bookingrepository.updateGuideAvailability(guideId);
             return new Responses<string> { StatuseCode = 200, Message = "Status Changed" };
         }
 
@@ -224,12 +225,17 @@ namespace Application.Services
                 return new Responses<string> { Message = "Bookin Not Found", StatuseCode = 400 };
 
             }
-            //if (!booking.Status.Equals("Approved", StringComparison.OrdinalIgnoreCase))
-            //{
-            //    return new Responses<string> { Message = "Booking can only be deleted after guide approval.", StatuseCode = 403 };
-            //}
+            if (!booking.Status.Equals("Approved", StringComparison.OrdinalIgnoreCase) &&
+                !booking.Status.Equals("Pending", StringComparison.OrdinalIgnoreCase))
+            {
+                return new Responses<string>
+                {
+                    Message = "Booking can only be deleted if it's Approved or Pending.",
+                    StatuseCode = 403
+                };
+            }
 
-            await _bookingrepository.DeleteAsync(booking);
+            await _bookingrepository.DeleteAsync(id);
             return new Responses<string> { Message = "Booking Deleted Succesfully", StatuseCode = 200 };
         }
     }

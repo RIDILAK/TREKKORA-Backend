@@ -26,6 +26,8 @@ namespace Domain.Entities
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
+        public bool isDeleted {  get; set; }=false;
+
         public string Status { get; set; } 
         public DateTime CreatedAt { get; set; }
 

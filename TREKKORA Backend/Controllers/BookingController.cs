@@ -101,7 +101,9 @@ namespace TREKKORA_Backend.Controllers
 
         public async Task<IActionResult>UpdateStatus(Guid Id,UpdateBookingStatusDto dto)
         {
-            var result=await _services.UpdateBookingStatusAsync(Id, dto);
+            var guideId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+
+            var result=await _services.UpdateBookingStatusAsync(Guid.Parse(guideId), Id, dto);
             return StatusCode(result.StatuseCode, result);
         }
 

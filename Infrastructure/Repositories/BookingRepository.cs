@@ -51,7 +51,7 @@ namespace Infrastructure.Repositories
                  .Include(b=>b.place)
                  .Include(b=>b.User)
                  .Include(b=>b.Guide)
-                .FirstOrDefaultAsync(x => x.BookingId == bookingId);
+                .FirstOrDefaultAsync(x => x.BookingId == bookingId &&x.isDeleted==false);
 
         }
 
@@ -90,9 +90,12 @@ namespace Infrastructure.Repositories
             _appDbContext.Bookings.Update(booking);
             await _appDbContext.SaveChangesAsync();
         }
-        public async Task DeleteAsync(Booking booking)
+        public async Task DeleteAsync(Guid bookingId)
         {
-            _appDbContext.Bookings.Remove(booking);
+            //_appDbContext.Bookings.Remove(booking);
+            //await _appDbContext.SaveChangesAsync();
+            var booking = await _appDbContext.Bookings.FirstOrDefaultAsync(x => x.BookingId == bookingId);
+            booking.isDeleted=true;
             await _appDbContext.SaveChangesAsync();
 
         }

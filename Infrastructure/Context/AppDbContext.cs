@@ -125,7 +125,14 @@
                 .WithOne(i => i.Place)
                 .HasForeignKey<Images>(i => i.PlaceId);
 
-            }
-    
+
+    //        modelBuilder.Entity<Images>()
+    //.HasOne(p => p.Place)
+    //.WithMany(i => i.Im)
+    //.HasForeignKey(i => i.PlaceId);
+
+
         }
+
+    }
     }

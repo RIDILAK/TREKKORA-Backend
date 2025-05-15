@@ -47,9 +47,10 @@ namespace Application.Dto
 
     public class UpdateBookingStatusDto
     {
-     
+      
         [Required]
-        [RegularExpression("Pending|Approved|Rejected",ErrorMessage ="Invalid Status,Must be in Approved and Rejected")]
+        //[RegularExpression("Pending|Approved|Rejected",ErrorMessage ="Invalid Status,Must be in Approved and Rejected")]
+        [AllowedValues("Rejected", "Approved", "Completed",ErrorMessage ="Invalid Status ,Must be in Approved ,Rejected and Completed")]
         public string Status { get; set; }
     }
 }
