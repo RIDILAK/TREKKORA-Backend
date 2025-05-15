@@ -33,7 +33,7 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
 
         }
-        public async Task updateGuideAvailability(Guid guideId)
+        public async Task SetAvailabiltyFalse(Guid guideId)
         {
             var guide= await _appDbContext.Users
                 .Include(x => x.GuideProfile)
@@ -41,6 +41,17 @@ namespace Infrastructure.Repositories
             guide.GuideProfile.isAvailable=false;
             await _appDbContext.SaveChangesAsync();
             
+
+        }
+
+        public async Task SetAvailabilityTrue(Guid guideId)
+        {
+            var guide = await _appDbContext.Users
+                .Include(x => x.GuideProfile)
+                .FirstOrDefaultAsync(x => x.GuideProfile.GuideId == guideId);
+            guide.GuideProfile.isAvailable = true;
+            await _appDbContext.SaveChangesAsync();
+
 
         }
 
@@ -114,10 +125,40 @@ namespace Infrastructure.Repositories
                 .Include(b=>b.User)
                 .Include(b=>b.Guide)
                 .Include(p=>p.place)
-                .Where(b=>b.GuideId==guideId && b.Status=="Pending")
+                .Where(b=>b.GuideId==guideId && b.Status=="Pending" &&b.isDeleted==false)
                 .ToListAsync();
         }
-       
+
+        public async Task<List<Booking>> GetApprovedRequest(Guid guideId)
+        {
+            return await _appDbContext.Bookings
+                .Include(b => b.User)
+                .Include(b => b.Guide)
+                .Include(p => p.place)
+                .Where(b => b.GuideId == guideId && b.Status == "Approved" && b.isDeleted == false)
+                .ToListAsync();
+        }
+
+        public async Task<List<Booking>> GetRejectedRequest(Guid guideId)
+        {
+            return await _appDbContext.Bookings
+                .Include(b => b.User)
+                .Include(b => b.Guide)
+                .Include(p => p.place)
+                .Where(b => b.GuideId == guideId && b.Status == "Rejected" && b.isDeleted == false)
+                .ToListAsync();
+        }
+
+        public async Task<List<Booking>> GetCompletedRequest(Guid guideId)
+        {
+            return await _appDbContext.Bookings
+                .Include(b => b.User)
+                .Include(b => b.Guide)
+                .Include(p => p.place)
+                .Where(b => b.GuideId == guideId && b.Status == "Completed" && b.isDeleted == false)
+                .ToListAsync();
+        }
+
     }
 }
 

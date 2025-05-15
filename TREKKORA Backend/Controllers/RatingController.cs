@@ -47,6 +47,16 @@ namespace TREKKORA_Backend.Controllers
             return StatusCode(rating.StatuseCode, rating);
         }
 
+        [HttpGet("GuideReview")]
+        [Authorize(Roles = "Guide")]
+
+        public async Task<IActionResult> GetRatingGuide()
+        {
+            var guideId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            var rating = await _ratinServices.GetRatingsForGuideAsync(Guid.Parse(guideId));
+            return StatusCode(rating.StatuseCode, rating);
+        }
+
         [HttpGet("Place")]
         [Authorize(Roles = "Admin,User")]
 

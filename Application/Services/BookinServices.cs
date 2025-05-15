@@ -18,6 +18,9 @@ namespace Application.Services
         Task<Responses<List<GetBookingDto>>> GetAllBookingGuid(Guid guideId);
         Task<Responses<List<GetBookingDto>>> GetAllBookingPlace(Guid placeId);
         Task<Responses<List<GetBookingDto>>> GetAllPendingBooking(Guid guideId);
+        Task<Responses<List<GetBookingDto>>> GetAllApprovedBooking(Guid guideId);
+        Task<Responses<List<GetBookingDto>>> GetAllRejectedBooking(Guid guideId);
+        Task<Responses<List<GetBookingDto>>> GetAllCompletedBooking(Guid guideId);
         Task<Responses<List<GetBookingDto>>> GetAllBooking();
         Task<Responses<string>> UpdateBookingStatusAsync(Guid guideId, Guid Id, UpdateBookingStatusDto dto);
 
@@ -158,6 +161,29 @@ namespace Application.Services
 
         }
 
+        public async Task<Responses<List<GetBookingDto>>> GetAllApprovedBooking(Guid guideId)
+        {
+            var booking = await _bookingrepository.GetApprovedRequest(guideId);
+            var mapped = _mapper.Map<List<GetBookingDto>>(booking);
+            return new Responses<List<GetBookingDto>> { Data = mapped, StatuseCode = 200, Message = "Approved Booking Fetched" };
+
+        }
+        public async Task<Responses<List<GetBookingDto>>> GetAllRejectedBooking(Guid guideId)
+        {
+            var booking = await _bookingrepository.GetRejectedRequest(guideId);
+            var mapped = _mapper.Map<List<GetBookingDto>>(booking);
+            return new Responses<List<GetBookingDto>> { Data = mapped, StatuseCode = 200, Message = "Rejected Booking Fetched" };
+
+        }
+
+        public async Task<Responses<List<GetBookingDto>>> GetAllCompletedBooking(Guid guideId)
+        {
+            var booking = await _bookingrepository.GetCompletedRequest(guideId);
+            var mapped = _mapper.Map<List<GetBookingDto>>(booking);
+            return new Responses<List<GetBookingDto>> { Data = mapped, StatuseCode = 200, Message = "Completed Booking Fetched" };
+
+        }
+
         public async Task<Responses<List<GetBookingDto>>> GetAllBooking()
         {
             var booking = await _bookingrepository.GetAllAsync();
@@ -176,7 +202,16 @@ namespace Application.Services
 
             booking.Status = dto.Status;
             await _bookingrepository.UpdateAsync(booking);
-            await _bookingrepository.updateGuideAvailability(guideId);
+            if (dto.Status == "Approved")
+            {
+                await _bookingrepository.SetAvailabiltyFalse(guideId);
+            }
+
+            if(dto.Status == "Completed")
+            {
+                await _bookingrepository.SetAvailabilityTrue(guideId);
+            }
+            
             return new Responses<string> { StatuseCode = 200, Message = "Status Changed" };
         }
 
@@ -224,6 +259,14 @@ namespace Application.Services
             {
                 return new Responses<string> { Message = "Bookin Not Found", StatuseCode = 400 };
 
+            }
+            if (booking.isDeleted)
+            {
+                return new Responses<string>
+                {
+                    Message = "Booking has already been cancelled.",
+                    StatuseCode = 409 
+                };
             }
             if (!booking.Status.Equals("Approved", StringComparison.OrdinalIgnoreCase) &&
                 !booking.Status.Equals("Pending", StringComparison.OrdinalIgnoreCase))

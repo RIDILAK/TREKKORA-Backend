@@ -96,6 +96,36 @@ namespace TREKKORA_Backend.Controllers
             return StatusCode(result.StatuseCode, result);
         }
 
+        [HttpGet("ApprovedRequests")]
+        [Authorize(Roles = "Guide,Admin")]
+
+        public async Task<IActionResult> GetApprovedRequest()
+        {
+            var guideId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            var result = await _services.GetAllApprovedBooking(Guid.Parse(guideId));
+            return StatusCode(result.StatuseCode, result);
+        }
+
+        [HttpGet("RejectedRequests")]
+        [Authorize(Roles = "Guide,Admin")]
+
+        public async Task<IActionResult> GetRejectedRequest()
+        {
+            var guideId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            var result = await _services.GetAllRejectedBooking(Guid.Parse(guideId));
+            return StatusCode(result.StatuseCode, result);
+        }
+
+        [HttpGet("CompletedRequests")]
+        [Authorize(Roles = "Guide,Admin")]
+
+        public async Task<IActionResult> GetCompletedRequest()
+        {
+            var guideId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            var result = await _services.GetAllCompletedBooking(Guid.Parse(guideId));
+            return StatusCode(result.StatuseCode, result);
+        }
+
         [HttpPut("Update-Status")]
         //[Authorize(Roles ="Guide")]
 

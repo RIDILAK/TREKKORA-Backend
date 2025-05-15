@@ -10,7 +10,8 @@ namespace Application.Interfaces
     public interface IBookingRepository
     {
         Task AddAsync(Booking booking);
-        Task updateGuideAvailability(Guid guideId);
+        Task SetAvailabiltyFalse(Guid guideId);
+        Task SetAvailabilityTrue(Guid guideId);
         Task<List<Booking>> GetAllAsync();
         Task<List<Booking>> GetAllUserBooking(Guid UserId);
         Task<List<Booking>>GetAllGuideBooking(Guid GuideId);
@@ -21,6 +22,9 @@ namespace Application.Interfaces
         Task<List<Booking>>GetByIdPlaceAsync(Guid placeId);
 
         Task<List<Booking>> GetPendingRequest(Guid guideId);
+         Task<List<Booking>> GetApprovedRequest(Guid guideId);
+        Task<List<Booking>> GetRejectedRequest(Guid guideId);
+        Task<List<Booking>> GetCompletedRequest(Guid guideId);
         Task<Booking> GetByPlace(Guid placeId);
     }
     

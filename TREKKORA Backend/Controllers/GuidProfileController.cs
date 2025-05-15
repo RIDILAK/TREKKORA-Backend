@@ -54,6 +54,17 @@ namespace TREKKORA_Backend.Controllers
             var result= await _guideProfileService.GetByIdGuides(id);
             return StatusCode(result.StatuseCode,result);
         }
+
+        [HttpGet("GetGuide")]
+        [Authorize]
+
+        public async Task<IActionResult> GetIdGuid()
+        {
+
+            var guideId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            var result = await _guideProfileService.GetByIdGuides(Guid.Parse(guideId));
+            return StatusCode(result.StatuseCode, result);
+        }
         [HttpGet("GetByPlace")]
         [Authorize]
         public async Task <IActionResult>GetByPlace(Guid placeId)
