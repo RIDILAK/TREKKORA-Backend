@@ -52,6 +52,7 @@ namespace Application.Dto
         public bool isAvailable { get; set; }
         public string Bio { get; set; }
         public string WhyTravelWithMe { get; set; }
+        public string Certificates { get; set; }
     }
     public class GuideDto
     {

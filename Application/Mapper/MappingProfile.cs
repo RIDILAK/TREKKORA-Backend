@@ -58,7 +58,8 @@ namespace Application.Mapper
             CreateMap<CreateRatingForPlaceDto, Rating>();
 
             CreateMap<Rating,GetRatingGuideDto>()
-                .ForMember(dest=>dest.GuideName, opt=>opt.MapFrom(src=>src.Guide.Name));
+                .ForMember(dest=>dest.GuideName, opt=>opt.MapFrom(src=>src.Guide.Name))
+                .ForMember(dest=>dest.UserName,opt=>opt.MapFrom(src=>src.User.Name));
             CreateMap<Rating,GetRatingPlaceDto>()
                 .ForMember(dest=>dest.PlaceName,opt=>opt.MapFrom(src=>src.Place.PlaceName));
             CreateMap<Rating,GetRatingByUser>()

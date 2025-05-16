@@ -40,6 +40,8 @@ namespace Application.Dto
     {
         public Guid Id { get; set; }
 
+        public string UserName {  get; set; }
+
         public Guid GuideId{get;set;}
         public string GuideName {  get; set; }  
         public decimal RatingValue { get; set; }
