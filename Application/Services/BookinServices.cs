@@ -12,6 +12,7 @@ namespace Application.Services
 {
     public interface IBookingServices
     {
+        public decimal CalculateGuideSalary(int numberOfPeople, decimal totalPrice);
         Task<Responses<string>> AddBookingAsync(AddBookingDto dto, Guid userId);
         Task<Responses<List<GetBookingDto>>> GetAllBookingUser(Guid userId);
         Task<Responses<GetBookingDto>>GetBookingById(Guid bookingId);
@@ -42,6 +43,25 @@ namespace Application.Services
             _userRepository = userRepository;
             _placeRepository = placeRepository;
 
+        }
+        public decimal CalculateGuideSalary(int numberOfPeople, decimal totalPrice)
+        {
+            decimal percentage = numberOfPeople switch
+            {
+                1 => 0.30m,
+                2 => 0.25m,
+                3 => 0.20m,
+                4 => 0.18m,
+                5 => 0.16m,
+                6 => 0.14m,
+                7 => 0.12m,
+                8 => 0.10m,
+                9 => 0.08m,
+                10 => 0.05m,
+                _ => 0.00m
+            };
+
+            return totalPrice * percentage;
         }
 
         public async Task<Responses<string>> AddBookingAsync(AddBookingDto dto, Guid userId)
@@ -81,8 +101,17 @@ namespace Application.Services
 
 
             }
+            if (dto.NumberOfPeople > 10)
+            {
+                return new Responses<string>
+                {
+                    StatuseCode = 405,
+                    Message = "You can book a maximum of 10 people per trip."
+                };
+            }
 
             decimal totalPrice = dto.NumberOfPeople * place.Price * TotalDays;
+            decimal guideSalary = CalculateGuideSalary(dto.NumberOfPeople, totalPrice);
 
             var booking = new Booking
             {
@@ -95,6 +124,7 @@ namespace Application.Services
                 EndDate = dto.EndDate,
                 BookingDate = DateTime.Now,
                 TotalPrice = totalPrice,
+                GuideSalary = guideSalary,
                 Status = "Pending",
                 CreatedAt = DateTime.Now,
             };

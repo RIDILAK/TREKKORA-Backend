@@ -15,6 +15,7 @@ namespace Application.Services
 {
     public interface IGuideProfileService
     {
+        Task<Responses<List<GetGuideDto>>> GetAllAvailableGuides();
         Task<Responses<List<GetGuideDto>>> GetAllGuides();
         Task<Responses<GetGuideDto>> GetByIdGuides(Guid id);
         Task<Responses<string>> AddProfile(GuideProfileDto guideProfile, IFormFile formFile, IFormFile formFile1, Guid id);
@@ -44,10 +45,10 @@ namespace Application.Services
             _mapper = mapper;
         }
 
-        public async Task<Responses<List<GetGuideDto>>> GetAllGuides()
+        public async Task<Responses<List<GetGuideDto>>> GetAllAvailableGuides()
         {
 
-            var guide = await _guideProfilerepository.GetAllGuidesAsync();
+            var guide = await _guideProfilerepository.GetAllAvailableGuidesAsync();
 
            
 
@@ -56,6 +57,20 @@ namespace Application.Services
             return new Responses<List<GetGuideDto>> { Data = guides, Message = "Fetched Guides", StatuseCode = 200 };
 
         }
+
+        public async Task<Responses<List<GetGuideDto>>> GetAllGuides()
+        {
+
+            var guide = await _guideProfilerepository.GetAllGuidesAsync();
+
+
+
+            var guides = _mapper.Map<List<GetGuideDto>>(guide);
+
+            return new Responses<List<GetGuideDto>> { Data = guides, Message = "Fetched Guides", StatuseCode = 200 };
+
+        }
+
 
 
 

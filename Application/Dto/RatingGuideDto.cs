@@ -51,7 +51,7 @@ namespace Application.Dto
     public class GetRatingPlaceDto
     {
         public Guid Id { get; set; }
-
+        public string UserName { get; set; }
         public Guid PlaceId { get; set; }
         public string PlaceName { get; set; }
         public decimal RatingValue { get; set; }

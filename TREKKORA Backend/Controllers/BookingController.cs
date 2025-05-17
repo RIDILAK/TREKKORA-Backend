@@ -77,6 +77,15 @@ namespace TREKKORA_Backend.Controllers
             var result= await _services.GetAllBookingGuid(guideId);
             return StatusCode(result.StatuseCode, result);
         }
+        [HttpGet("GetByGuide")]
+        [Authorize(Roles ="Guide")]
+        public async Task<IActionResult> GetBookinGuideOwn()
+        {
+            var guideId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            var result = await _services.GetAllBookingGuid(Guid.Parse(guideId));
+            return StatusCode(result.StatuseCode, result);
+        }
+
         [HttpGet("Place")]
         //[Authorize(Roles ="Admin")]
 

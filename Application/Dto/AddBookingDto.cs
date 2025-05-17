@@ -9,11 +9,16 @@ namespace Application.Dto
 {
     public class AddBookingDto
     {
-       
+        [Required]
         public Guid PlaceId { get; set; }
+        [Required]
         public Guid GuideId { get; set; }
+        [Required]
+        [Range(1, 10, ErrorMessage = "Number of people must be between 1 and 10.")]
         public int NumberOfPeople { get; set; }
+        [Required]
         public DateTime StartDate { get; set; }
+        [Required]
         public DateTime EndDate { get; set; }
     }
 
@@ -31,6 +36,8 @@ namespace Application.Dto
         public string GuideImage {  get; set; }
         public int NumberOfPeople { get; set; }
         public decimal TotalPrice { get; set; }
+
+        public decimal GuideSalary { get; set; }
         public DateTime BookingDate { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

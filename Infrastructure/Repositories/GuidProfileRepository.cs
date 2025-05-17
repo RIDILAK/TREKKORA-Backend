@@ -16,7 +16,7 @@ namespace Infrastructure.Repositories
         private readonly AppDbContext _context;
         public GuidProfileRepository(AppDbContext context) => _context = context;
 
-        public async Task<List<User>> GetAllGuidesAsync()
+        public async Task<List<User>> GetAllAvailableGuidesAsync()
         {
             return await _context.Users
                 .Include(u => u.GuideProfile)
@@ -30,7 +30,20 @@ namespace Infrastructure.Repositories
                             )
                 .ToListAsync();
         }
+        public async Task<List<User>> GetAllGuidesAsync()
+        {
+            return await _context.Users
+                .Include(u => u.GuideProfile)
 
+                    .ThenInclude(p => p.Place)
+                .Where(u => u.Role == "Guide"
+                            && !u.IsDeleted
+                            && u.GuideProfile != null
+                            && u.GuideProfile.ISApproved == true
+                           
+                            )
+                .ToListAsync();
+        }
 
         public async Task<User> GetByIdAsync(Guid id)
         {

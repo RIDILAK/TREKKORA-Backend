@@ -39,6 +39,7 @@ namespace Infrastructure.Repositories
         {
             return await _context.Rating
                 .Include (r => r.Place)
+                .Include(r=>r.User)
                 .Where(r => r.PlaceId == placeId)
                 .ToListAsync();
         }

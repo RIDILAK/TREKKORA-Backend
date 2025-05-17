@@ -22,6 +22,8 @@ namespace Domain.Entities
 
         public int NumberOfPeople { get; set; }
         public decimal TotalPrice { get; set; }
+        public decimal GuideSalary { get; set; }
+
         public DateTime BookingDate { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

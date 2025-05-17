@@ -35,14 +35,22 @@ namespace TREKKORA_Backend.Controllers
             return StatusCode(result.StatuseCode, result);
         }
 
-        [HttpGet("All")]
-        //[Authorize]
-        //[Authorize(Roles ="Admin,User")]
+        [HttpGet("AllAvaailableGuides")]
+       
+        //[Authorize(Roles = "Admin,User")]
 
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAllAvailableGuides()
         {
-            var result=await _guideProfileService.GetAllGuides();
+            var result=await _guideProfileService.GetAllAvailableGuides();
             return StatusCode(result.StatuseCode, result);
+        }
+
+        [HttpGet("AllGuides")]
+        [Authorize(Roles ="Admin")]
+        public async Task<IActionResult> GetAllGuides()
+        {
+             var result= await _guideProfileService.GetAllGuides();
+            return StatusCode(result.StatuseCode,result);
         }
 
         [HttpGet("GetById")]
