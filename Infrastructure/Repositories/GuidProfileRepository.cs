@@ -30,7 +30,7 @@ namespace Infrastructure.Repositories
                             )
                 .ToListAsync();
         }
-        public async Task<List<User>> GetAllGuidesAsync()
+        public async Task<List<User>> GetAllApprovedGuidesAsync()
         {
             return await _context.Users
                 .Include(u => u.GuideProfile)
@@ -41,6 +41,20 @@ namespace Infrastructure.Repositories
                             && u.GuideProfile != null
                             && u.GuideProfile.ISApproved == true
                            
+                            )
+                .ToListAsync();
+        }
+        public async Task<List<User>> GetAllGuidesAsync()
+        {
+            return await _context.Users
+                .Include(u => u.GuideProfile)
+
+                    .ThenInclude(p => p.Place)
+                .Where(u => u.Role == "Guide"
+                            && !u.IsDeleted
+                            && u.GuideProfile != null
+                           
+
                             )
                 .ToListAsync();
         }
@@ -87,6 +101,7 @@ namespace Infrastructure.Repositories
         {
             return await _context.Users
                 .Include(u => u.GuideProfile)
+                .ThenInclude(u=>u.Place)
                 .Where(u=>u.Role=="Guide" &&
                 !u.IsDeleted &&
                 u.GuideProfile != null &&

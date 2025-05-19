@@ -15,8 +15,9 @@ namespace Application.Services
 {
     public interface IGuideProfileService
     {
-        Task<Responses<List<GetGuideDto>>> GetAllAvailableGuides();
+        Task<Responses<List<GetGuideDto>>> GetAllAvailabkeGuides();
         Task<Responses<List<GetGuideDto>>> GetAllGuides();
+        Task<Responses<List<GetGuideDto>>> GetAllApprovedGuides();
         Task<Responses<GetGuideDto>> GetByIdGuides(Guid id);
         Task<Responses<string>> AddProfile(GuideProfileDto guideProfile, IFormFile formFile, IFormFile formFile1, Guid id);
 
@@ -25,7 +26,7 @@ namespace Application.Services
         Task<Responses<string>> DeleteProfile(Guid id);
         Task<Responses<string>> ToggleBlockGuide(Guid id);
         Task<Responses<bool>>ApprovedGuide(Guid GuideId);
-        Task<Responses<List<GuideDto>>> GetUnapprovedGuides();
+        Task<Responses<List<GetGuideDto>>> GetUnapprovedGuides();
         Task<Responses<List<GetGuideDto>>> GetByPlace(Guid placeId);
 
 
@@ -45,7 +46,20 @@ namespace Application.Services
             _mapper = mapper;
         }
 
-        public async Task<Responses<List<GetGuideDto>>> GetAllAvailableGuides()
+        public async Task<Responses<List<GetGuideDto>>> GetAllGuides()
+        {
+
+            var guide = await _guideProfilerepository.GetAllGuidesAsync();
+
+
+
+            var guides = _mapper.Map<List<GetGuideDto>>(guide);
+
+            return new Responses<List<GetGuideDto>> { Data = guides, Message = "Fetched Guides", StatuseCode = 200 };
+
+        }
+
+        public async Task<Responses<List<GetGuideDto>>> GetAllAvailabkeGuides()
         {
 
             var guide = await _guideProfilerepository.GetAllAvailableGuidesAsync();
@@ -58,10 +72,10 @@ namespace Application.Services
 
         }
 
-        public async Task<Responses<List<GetGuideDto>>> GetAllGuides()
+        public async Task<Responses<List<GetGuideDto>>> GetAllApprovedGuides()
         {
 
-            var guide = await _guideProfilerepository.GetAllGuidesAsync();
+            var guide = await _guideProfilerepository.GetAllApprovedGuidesAsync();
 
 
 
@@ -214,15 +228,15 @@ public async Task<Responses<string>> UpdateProfile(Guid id, GuideDto guideDto, I
 
         }
 
-       public async Task<Responses<List<GuideDto>>> GetUnapprovedGuides()
+       public async Task<Responses<List<GetGuideDto>>> GetUnapprovedGuides()
         {
             var guides = await _guideProfilerepository.GetUnapprovedGuides();
             if (guides == null)
             {
-                return new Responses<List<GuideDto>> { Message = "No Unapproved Guides", StatuseCode = 400 };
+                return new Responses<List<GetGuideDto>> { Message = "No Unapproved Guides", StatuseCode = 400 };
             }
-            var mapped= _mapper.Map<List<GuideDto>>(guides);
-            return new Responses<List<GuideDto>> { Data=mapped,StatuseCode=200,Message="Unapproved guides Fetched" };
+            var mapped= _mapper.Map<List<GetGuideDto>>(guides);
+            return new Responses<List<GetGuideDto>> { Data=mapped,StatuseCode=200,Message="Unapproved guides Fetched" };
 
         }
     }

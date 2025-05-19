@@ -50,6 +50,7 @@ namespace Application.Dto
         public string AreasCovered { get; set; }
 
         public bool isAvailable { get; set; }
+        public bool ISApproved { get; set; }
         public string Bio { get; set; }
         public string WhyTravelWithMe { get; set; }
         public string Certificates { get; set; }
@@ -59,6 +60,8 @@ namespace Application.Dto
        
         public string Name { get; set; }
         public string Email { get; set; }
+        public bool IsBlocked { get; set; }
+
         public GuideProfileDto GuideProfileDto { get; set; }
       
     }
@@ -66,6 +69,9 @@ namespace Application.Dto
     {
      public string Name { get; set; }
     public string Email { get; set; }
+
+        public bool IsBlocked { get; set; }
+
         public GetGuideProfileDto GetGuideProfileDto { get; set; }
 
         public static implicit operator List<object>(GetGuideDto v)

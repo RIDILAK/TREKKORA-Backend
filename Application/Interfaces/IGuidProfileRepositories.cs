@@ -9,6 +9,7 @@ namespace Application.Interfaces
 {
     public interface IGuidProfileRepositories
     {
+        Task<List<User>> GetAllApprovedGuidesAsync();
         Task<List<User>> GetAllGuidesAsync();
         Task<List<User>> GetAllAvailableGuidesAsync();
         Task<User> GetByIdAsync(Guid id);

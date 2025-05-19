@@ -45,6 +45,17 @@ namespace TREKKORA_Backend.Controllers
             var result= await _services.GetBookingById(bookingId);
             return StatusCode(result.StatuseCode, result);
         }
+        [HttpGet("Userbyid")]
+        //[Authorize(Roles ="User,Admin")]
+        [Authorize(Roles ="Admin")]
+
+        public async Task<IActionResult> GetBookingbyUserid(Guid userId)
+        {
+            //var userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            var result = await _services.GetAllBookingUser(userId);
+
+            return StatusCode(result.StatuseCode, result);
+        }
         [HttpGet("User")]
         //[Authorize(Roles ="User,Admin")]
         [Authorize]
