@@ -14,6 +14,8 @@ namespace Application.Interfaces
         Task<IEnumerable<Rating>> GetRatingsForGuideAsync(Guid guideId);
         Task<IEnumerable<Rating>> GetRatingsForPlaceAsync(Guid placeId);
         Task<IEnumerable<Rating>> GetRatingsByUserAsync(Guid userId);
+        Task<List<Rating>> GetAllplaceRatings();
+         Task<List<Rating>> GetAllguideRatings();
         Task<Rating> GetByIdAsync(Guid id);
         Task<bool> DeleteAsync(Rating rating);
         Task<Rating> GetRatingForGuideByUserAsync(Guid guideId, Guid userId);

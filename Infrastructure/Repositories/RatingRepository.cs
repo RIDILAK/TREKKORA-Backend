@@ -24,6 +24,22 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
             return rating;
         }
+        public async Task<List<Rating>> GetAllplaceRatings()
+        {
+            return await _context.Rating
+                .Include(r => r.User)
+                .Include(r => r.Guide)
+                .Include(r => r.Place).Where(r => (r.GuideId == null || r.GuideId == Guid.Empty) && (r.Guide.Name == null))
+                .ToListAsync();
+        }
+
+        public async Task<List<Rating>> GetAllguideRatings()
+        {
+            return await _context.Rating
+                .Include(r => r.User)
+                .Include(r => r.Guide).Where(r => (r.GuideId !=null || r.GuideId!=Guid.Empty)&&(r.Guide.Name!=null))
+                .ToListAsync();
+        }
 
         public async Task<IEnumerable<Rating>> GetRatingsForGuideAsync(Guid guideId)
         {

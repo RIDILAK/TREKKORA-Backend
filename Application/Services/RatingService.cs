@@ -13,6 +13,8 @@ namespace Application.Services
 
    public interface IRatinServices
     {
+        Task<Responses<List<GetRatingGuideDto>>> GeAllguidetRatings();
+        Task<Responses<List<GetRatingPlaceDto>>> GetallplaceRatings();
         Task<Responses<Rating>> CreateRatingForGuideAsync(RatingGuideDto dto,Guid userId);
         Task<Responses<Rating>> CreateRatingForPlaceAsync(CreateRatingForPlaceDto dto,Guid userId);
         Task<Responses<IEnumerable<GetRatingGuideDto>>> GetRatingsForGuideAsync(Guid guideId);
@@ -29,6 +31,19 @@ namespace Application.Services
         {
             _ratingRepository = ratingRepository;
             _mapper = mapper;
+        }
+        public async Task<Responses<List<GetRatingGuideDto>>> GeAllguidetRatings()
+        {
+            var ratings = await _ratingRepository.GetAllguideRatings();
+            var mapped= _mapper.Map<List<GetRatingGuideDto>>(ratings);
+            return new Responses<List<GetRatingGuideDto>>() { Message = "Fetched", StatuseCode = 200, Data = mapped };
+        }
+
+      public async  Task<Responses<List<GetRatingPlaceDto>>> GetallplaceRatings()
+        {
+         var artings= await _ratingRepository.GetAllplaceRatings();
+            var mapped=_mapper.Map<List<GetRatingPlaceDto>>(artings);
+            return new Responses<List<GetRatingPlaceDto>> { Data = mapped,Message="Fetched",StatuseCode=200 };
         }
         public async Task<Responses<Rating>> CreateRatingForGuideAsync(RatingGuideDto dto, Guid userId)
         {

@@ -17,6 +17,22 @@ namespace TREKKORA_Backend.Controllers
         {
             _ratinServices = ratinServices;
         }
+        [HttpGet("GetAllGuides")]
+        [Authorize(Roles ="Admin")]
+
+        public async Task<IActionResult> GetAll()
+        {
+            var result= await _ratinServices.GeAllguidetRatings();
+            return StatusCode(result.StatuseCode, result);
+        }
+        [HttpGet("GetAllPlace")]
+        [Authorize(Roles ="Admin")]
+
+        public async Task<IActionResult> GetAllPlaceRating()
+        {
+            var result= await _ratinServices.GetallplaceRatings();
+            return StatusCode(result.StatuseCode,result);
+        }
 
         [HttpPost("Guide")]
         [Authorize(Roles ="User")]
